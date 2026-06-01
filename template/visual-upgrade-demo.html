@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>视觉升级demo v4 · 纯白底精致现代风</title>
+<link rel="stylesheet" href="theme.css">
+<link rel="stylesheet" href="components.css">
+<style>
+  /* === v4 变量：纯白底 + hairline + 大字号锚点 === */
+  :root {
+    --bg-pure: #FFFFFF;             /* 纯白主背景（集团惯例） */
+    --hairline: #E8E8E8;            /* 中性 hairline */
+    --hairline-warm: #ECEAE4;       /* 暖灰 hairline（点缀用） */
+    --soft-red: #FCEFEC;            /* 红的最浅版（标签/底色用） */
+    --soft-green: #EEF5ED;          /* 绿的最浅版 */
+    --soft-orange: #FCF1E5;         /* 橙的最浅版 */
+    --soft-navy: #ECEFF3;           /* 深蓝的最浅版 */
+    --ink-strong: #1A1A1A;
+    --ink-med: #555555;
+    --ink-soft: #888888;
+    --shadow-soft: 0 1px 2px rgba(0,0,0,0.03), 0 0 0 1px rgba(0,0,0,0.025);
+    --shadow-card: 0 4px 12px rgba(0,0,0,0.04), 0 0 0 1px rgba(0,0,0,0.025);
+  }
+
+  body { background: #ddd; }
+
+  .slide {
+    background: var(--bg-pure);    /* 纯白底 */
+  }
+
+  .slide-body {
+    padding: 40px 60px 56px 60px;
+    height: 100%;
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+  }
+  .nav-bar {
+    position: fixed; top: 12px; right: 12px;
+    background: rgba(0,0,0,0.7); color: white;
+    padding: 8px 14px; border-radius: 4px;
+    font-size: 12px; z-index: 1000; font-family: monospace;
+  }
+  .demo-label {
+    position: absolute;
+    top: -28px; left: 0;
+    background: var(--ink-strong);
+    color: white;
+    padding: 6px 16px;
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    border-radius: 2px;
+  }
+
+  /* ============ v4 关键论点 ============ */
+  .v4-keypoint {
+    background: white;
+    border-top: 1px solid var(--hairline);
+    border-right: 1px solid var(--hairline);
+    border-bottom: 1px solid var(--hairline);
+    border-left: 4px solid var(--brand-red);
+    box-shadow: var(--shadow-soft);
+    padding: 18pt 24pt;
+    margin: 6pt 0 22pt 0;
+    display: flex;
+    gap: 20pt;
+    align-items: flex-start;
+  }
+  .v4-keypoint-tag {
+    display: inline-block;
+    font-size: 9pt;
+    color: var(--brand-red);
+    background: var(--soft-red);
+    padding: 2pt 10pt;
+    border-radius: 2px;
+    letter-spacing: 0.2em;
+    font-weight: 600;
+    margin-bottom: 8pt;
+  }
+  .v4-keypoint p {
+    margin: 0;
+    font-size: 13pt;
+    line-height: 1.85;
+    color: var(--ink-strong);
+    font-weight: 400;
+  }
+  .v4-keypoint .accent {
+    color: var(--brand-red);
+    font-weight: 600;
+  }
+  .v4-keypoint-icon {
+    flex-shrink: 0;
+    width: 32px; height: 32px;
+    color: var(--brand-red);
+    margin-top: 4pt;
+  }
+
+  /* ============ v4 三栏卡片 ============ */
+  .v4-cards {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 18pt;
+    flex: 1;
+    margin-top: 12pt;
+  }
+  .v4-card {
+    background: white;
+    border: 1px solid var(--hairline);
+    box-shadow: var(--shadow-card);
+    padding: 24pt 22pt;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    overflow: hidden;
+  }
+  .v4-card::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: var(--brand-orange);
+  }
+  .v4-card:nth-child(2)::before { background: var(--brand-red); }
+  .v4-card:nth-child(3)::before { background: var(--brand-green); }
+
+  .v4-card-head {
+    display: flex;
+    align-items: baseline;
+    gap: 14pt;
+    margin-bottom: 14pt;
+    padding-bottom: 14pt;
+    border-bottom: 1px solid var(--hairline);
+  }
+  .v4-card-num {
+    font-family: var(--font-en);
+    font-size: 46pt;
+    font-weight: 200;          /* 极细字重 */
+    line-height: 0.9;
+    color: var(--brand-orange);
+    letter-spacing: -0.02em;
+  }
+  .v4-card:nth-child(2) .v4-card-num { color: var(--brand-red); }
+  .v4-card:nth-child(3) .v4-card-num { color: var(--brand-green); }
+
+  .v4-card-title {
+    font-size: 15pt;
+    font-weight: 700;
+    color: var(--ink-strong);
+    line-height: 1.3;
+  }
+  .v4-card-title-sub {
+    font-size: 10pt;
+    color: var(--ink-soft);
+    margin-top: 4pt;
+    letter-spacing: 0.08em;
+    font-family: var(--font-en);
+  }
+  .v4-card-body {
+    flex: 1;
+  }
+  .v4-card-body p {
+    margin: 0 0 10pt 0;
+    font-size: 11.5pt;
+    line-height: 1.85;
+    color: var(--ink-med);
+  }
+  .v4-card-body p strong {
+    color: var(--ink-strong);
+    font-weight: 600;
+  }
+  .v4-card-tags {
+    margin-top: 12pt;
+    padding-top: 12pt;
+    border-top: 1px dashed var(--hairline);
+  }
+  .v4-card-tag {
+    display: inline-block;
+    font-size: 9.5pt;
+    color: var(--ink-med);
+    border: 1px solid var(--hairline);
+    padding: 2pt 8pt;
+    border-radius: 12px;
+    margin-right: 4pt;
+    margin-bottom: 4pt;
+  }
+  .v4-card-tag.is-orange { color: var(--brand-orange); border-color: var(--brand-orange); background: var(--soft-orange); }
+  .v4-card-tag.is-red { color: var(--brand-red); border-color: var(--brand-red); background: var(--soft-red); }
+  .v4-card-tag.is-green { color: var(--brand-green); border-color: var(--brand-green); background: var(--soft-green); }
+
+  /* ============ v4 章节分隔页：白底编辑设计风 ============ */
+  .v4-section {
+    background: white;
+    position: relative;
+    overflow: hidden;
+  }
+  /* 顶部三色 hairline */
+  .v4-section::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--brand-orange) 0%, var(--brand-red) 35%, var(--brand-green) 70%, var(--brand-lightgreen) 100%);
+  }
+  /* 左侧浅红色装饰区 */
+  .v4-section::after {
+    content: "";
+    position: absolute;
+    bottom: 0; left: 0;
+    width: 38%; height: 100%;
+    background: linear-gradient(135deg, rgba(252,239,236,0.5) 0%, transparent 80%);
+    z-index: 0;
+  }
+  .v4-section .slide-body {
+    padding: 70px 80px;
+    display: grid;
+    grid-template-columns: 0.4fr 0.6fr;
+    align-items: center;
+    gap: 50px;
+    position: relative;
+    z-index: 1;
+  }
+  .v4-section-left {
+    text-align: right;
+    border-right: 1px solid var(--hairline);
+    padding-right: 50px;
+    position: relative;
+  }
+  .v4-section-num {
+    font-family: var(--font-en);
+    font-size: 170pt;
+    font-weight: 100;          /* 超细字重，编辑设计感 */
+    line-height: 0.85;
+    color: var(--ink-strong);
+    letter-spacing: -0.05em;
+  }
+  .v4-section-num-label {
+    font-size: 11pt;
+    color: var(--ink-soft);
+    letter-spacing: 0.4em;
+    margin-top: 18pt;
+    font-family: var(--font-en);
+  }
+  .v4-section-right .section-label {
+    font-size: 10pt;
+    color: var(--brand-red);
+    background: var(--soft-red);
+    display: inline-block;
+    padding: 4pt 14pt;
+    letter-spacing: 0.2em;
+    border-radius: 2px;
+    margin-bottom: 18pt;
+    font-weight: 600;
+  }
+  .v4-section-right .title {
+    font-size: 32pt;
+    font-weight: 700;
+    color: var(--ink-strong);
+    line-height: 1.3;
+    margin: 0 0 16pt 0;
+  }
+  .v4-section-right .subtitle {
+    font-size: 13pt;
+    color: var(--ink-med);
+    line-height: 1.7;
+    max-width: 480px;
+    font-weight: 300;
+  }
+  .v4-section-right .meta {
+    margin-top: 26pt;
+    padding-top: 20pt;
+    border-top: 1px solid var(--hairline);
+    display: flex;
+    gap: 40pt;
+  }
+  .v4-section-right .meta-item .num {
+    font-family: var(--font-en);
+    font-size: 26pt;
+    font-weight: 600;
+    color: var(--brand-red);
+    line-height: 1;
+  }
+  .v4-section-right .meta-item .lbl {
+    font-size: 10pt;
+    color: var(--ink-soft);
+    margin-top: 5pt;
+    letter-spacing: 0.05em;
+  }
+
+  /* Section 1 / 2 通用的页面标题区 */
+  .v4-title-row {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    padding-bottom: 14pt;
+    border-bottom: 1px solid var(--hairline);
+    margin-bottom: 4pt;
+  }
+  .v4-title-row h2 {
+    font-size: 22pt;
+    font-weight: 700;
+    color: var(--ink-strong);
+    margin: 0;
+    line-height: 1.3;
+  }
+  .v4-title-row .meta {
+    font-size: 9.5pt;
+    color: var(--ink-soft);
+    letter-spacing: 0.15em;
+  }
+
+  /* Section 1 下方三栏小卡 */
+  .v4-mini-cards {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 16pt;
+    flex: 1;
+    margin-top: 8pt;
+  }
+  .v4-mini-card {
+    background: white;
+    border: 1px solid var(--hairline);
+    box-shadow: var(--shadow-soft);
+    padding: 18pt 20pt;
+    display: flex;
+    flex-direction: column;
+    gap: 8pt;
+    position: relative;
+    border-top: 3px solid var(--brand-orange);
+  }
+  .v4-mini-card:nth-child(2) { border-top-color: var(--brand-red); }
+  .v4-mini-card:nth-child(3) { border-top-color: var(--brand-green); }
+
+  .v4-mini-card .mini-num {
+    font-family: var(--font-en);
+    font-size: 11pt;
+    font-weight: 700;
+    color: var(--brand-orange);
+    letter-spacing: 0.1em;
+  }
+  .v4-mini-card:nth-child(2) .mini-num { color: var(--brand-red); }
+  .v4-mini-card:nth-child(3) .mini-num { color: var(--brand-green); }
+  .v4-mini-card h4 {
+    margin: 0;
+    font-size: 15pt;
+    font-weight: 700;
+    color: var(--ink-strong);
+  }
+  .v4-mini-card p {
+    margin: 0;
+    font-size: 11pt;
+    line-height: 1.8;
+    color: var(--ink-med);
+  }
+  .v4-mini-card .red { color: var(--brand-red); font-weight: 600; }
+
+</style>
+</head>
+<body>
+
+<div class="nav-bar">视觉升级 v4 · 纯白底 + hairline + 大字号锚点</div>
+
+<!-- ========== 样张 1: 关键论点 + 三栏 mini-card ========== -->
+<section class="slide" style="margin-top:60px;">
+  <div class="demo-label">样张 1 · 纯白底 + hairline + 微阴影 + 大字号锚点</div>
+  <div class="logo-corner">
+    <img src="../shared/logos/etrc/etrc-logo.png" alt="经研院">
+  </div>
+
+  <div class="slide-body">
+    <div class="v4-title-row">
+      <h2>"十五五"时期能源行业面临三大转折</h2>
+      <div class="meta">第 一 部 分 · 03</div>
+    </div>
+    <div class="page-wave" style="opacity:0.6;margin-top:4pt;"><img src="_assets/wave-inner.png" alt=""></div>
+
+    <div class="v4-keypoint">
+      <svg class="v4-keypoint-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="9"></circle>
+        <path d="M9 12 L11 14 L15 10"></path>
+      </svg>
+      <div>
+        <span class="v4-keypoint-tag">核 心 判 断</span>
+        <p>能源行业正处于<span class="accent">能源结构、市场逻辑、管理逻辑</span>同时转向的历史时期，未来五年是从"<span class="accent">量的积累</span>"迈向"<span class="accent">质的跃升</span>"的关键攻坚期。</p>
+      </div>
+    </div>
+
+    <div class="v4-mini-cards">
+      <div class="v4-mini-card">
+        <div class="mini-num">01 / 能源结构</div>
+        <h4>从化石主导<br>到非化石主导</h4>
+        <p>2030 年非化石能源发电量<span class="red">历史性超过化石能源</span>，能源结构发生根本转换。</p>
+      </div>
+      <div class="v4-mini-card">
+        <div class="mini-num">02 / 市场逻辑</div>
+        <h4>从规模驱动<br>到价值驱动</h4>
+        <p>136 号文后<span class="red">"唯规模论"失效</span>，全国统一电力市场让价值赢家通吃。</p>
+      </div>
+      <div class="v4-mini-card">
+        <div class="mini-num">03 / 管理逻辑</div>
+        <h4>从能耗双控<br>到碳排放双控</h4>
+        <p>"十五五"单位 GDP 能耗下降 <span class="red">10%</span>、碳排放降 <span class="red">17%</span>，管理范式重塑。</p>
+      </div>
+    </div>
+  </div>
+  <div class="page-footer">
+    <span></span>
+    <span class="page-num">03</span>
+  </div>
+</section>
+
+<!-- ========== 样张 2: 编辑设计风三栏卡片 ========== -->
+<section class="slide" style="margin-top:80px;">
+  <div class="demo-label">样张 2 · 大数字（极细字重）+ hairline 边框 + 标签丝带</div>
+  <div class="logo-corner">
+    <img src="../shared/logos/etrc/etrc-logo.png" alt="经研院">
+  </div>
+
+  <div class="slide-body">
+    <div class="v4-title-row">
+      <h2>集团"十五五"战略落地三大抓手</h2>
+      <div class="meta">第 三 部 分 · 07</div>
+    </div>
+    <div class="page-wave" style="opacity:0.6;margin-top:4pt;"><img src="_assets/wave-inner.png" alt=""></div>
+
+    <div class="v4-keypoint">
+      <svg class="v4-keypoint-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M3 12 L21 12"></path><path d="M3 6 L21 6"></path><path d="M3 18 L21 18"></path>
+      </svg>
+      <div>
+        <span class="v4-keypoint-tag">战 略 抓 手</span>
+        <p>围绕"<span class="accent">矢志创一流、奋斗八百亿</span>"战略目标，建议在<span class="accent">战略层 · 业务层 · 能力层</span>三个层面同步推进。</p>
+      </div>
+    </div>
+
+    <div class="v4-cards">
+      <div class="v4-card">
+        <div class="v4-card-head">
+          <div class="v4-card-num">01</div>
+          <div>
+            <div class="v4-card-title">战略层 · 保持定力</div>
+            <div class="v4-card-title-sub">STRATEGIC ANCHOR</div>
+          </div>
+        </div>
+        <div class="v4-card-body">
+          <p>坚定走"<strong>均衡增长战略</strong>"道路，把建设世界一流清洁能源企业的愿景与国家"十五五"发展方向统一起来。</p>
+        </div>
+        <div class="v4-card-tags">
+          <span class="v4-card-tag is-orange">2030 世界一流</span>
+          <span class="v4-card-tag is-orange">均衡增长</span>
+        </div>
+      </div>
+
+      <div class="v4-card">
+        <div class="v4-card-head">
+          <div class="v4-card-num">02</div>
+          <div>
+            <div class="v4-card-title">业务层 · 突出主业</div>
+            <div class="v4-card-title-sub">BUSINESS FOCUS</div>
+          </div>
+        </div>
+        <div class="v4-card-body">
+          <p>"<strong>3+1</strong>"主业格局做深做实，核电、铝业、新能源、煤电、燃机、氢基六大领域专项规划齐头并进。</p>
+        </div>
+        <div class="v4-card-tags">
+          <span class="v4-card-tag is-red">3+1 主业</span>
+          <span class="v4-card-tag is-red">六大专项</span>
+        </div>
+      </div>
+
+      <div class="v4-card">
+        <div class="v4-card-head">
+          <div class="v4-card-num">03</div>
+          <div>
+            <div class="v4-card-title">能力层 · 科技驱动</div>
+            <div class="v4-card-title-sub">CAPABILITY ENGINE</div>
+          </div>
+        </div>
+        <div class="v4-card-body">
+          <p>钍基熔盐堆"<strong>头号工程</strong>"、重型燃机产业化、绿色氢基自主可控、AI 赋能能源央企"必答题"。</p>
+        </div>
+        <div class="v4-card-tags">
+          <span class="v4-card-tag is-green">钍基熔盐堆</span>
+          <span class="v4-card-tag is-green">AI 赋能</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="data-source">国家电投2026年工作会议工作报告、董事长研讨班讲话</div>
+  </div>
+  <div class="page-footer">
+    <span></span>
+    <span class="page-num">07</span>
+  </div>
+</section>
+
+<!-- ========== 样张 3: 章节分隔页（白底编辑设计风） ========== -->
+<section class="slide v4-section" style="margin-top:80px;">
+  <div class="demo-label">样张 3 · 白底章节分隔页（超细大数字 + 浅红光晕 + 数据元）</div>
+  <div class="logo-corner">
+    <img src="../shared/logos/etrc/etrc-logo.png" alt="经研院">
+  </div>
+
+  <div class="slide-body">
+    <div class="v4-section-left">
+      <div class="v4-section-num">02</div>
+      <div class="v4-section-num-label">P A R T &nbsp; T W O</div>
+    </div>
+    <div class="v4-section-right">
+      <div class="section-label">第 二 部 分</div>
+      <h2 class="title">"十五五"规划纲要<br>核心要义解读</h2>
+      <p class="subtitle">从党中央《建议》到全国人大《纲要》，看能源行业获得的三大使命与硬约束指标。</p>
+      <div class="meta">
+        <div class="meta-item">
+          <div class="num">17<span style="font-size:14pt;">%</span></div>
+          <div class="lbl">碳排放降低</div>
+        </div>
+        <div class="meta-item">
+          <div class="num">58<span style="font-size:14pt;">亿吨</span></div>
+          <div class="lbl">能源生产能力</div>
+        </div>
+        <div class="meta-item">
+          <div class="num">50<span style="font-size:14pt;">%+</span></div>
+          <div class="lbl">非化石占比</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+</body>
+</html>

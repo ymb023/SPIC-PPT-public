@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>TOC 居中演示</title>
+<link rel="stylesheet" href="theme.css">
+<link rel="stylesheet" href="components.css">
+<style>
+  .slide-body { padding: 40px 80px; height: 100%; position: relative; }
+  .toc { list-style: none; padding: 0; margin: 0; }
+  .toc > li {
+    display: grid;
+    grid-template-columns: 80pt 1fr 80pt;
+    gap: 28pt;
+    align-items: center;
+    padding: 20pt 0;
+    border-bottom: 1px dashed var(--hairline);
+  }
+  .toc > li:last-child { border-bottom: none; }
+  .toc-num {
+    font-family: var(--font-en);
+    font-size: 56pt;
+    font-weight: var(--fw-light);
+    color: var(--brand-orange);
+    line-height: 1;
+  }
+  .toc > li:nth-child(2) .toc-num { color: var(--brand-red); }
+  .toc > li:nth-child(3) .toc-num { color: var(--brand-green); }
+  .toc-title {
+    font-size: 22pt;
+    font-weight: var(--fw-bold);
+    color: var(--brand-navy);
+    letter-spacing: 0.1em;
+    margin-bottom: 6pt;
+  }
+  .toc-sub {
+    font-size: 13pt;
+    color: var(--ink-med);
+    line-height: 1.5;
+  }
+  .toc-pages {
+    font-family: var(--font-en);
+    font-size: 14pt;
+    color: var(--ink-soft);
+    text-align: right;
+    letter-spacing: 0.05em;
+  }
+</style>
+</head>
+<body>
+
+<!-- A · slide.center-y 修饰类 -->
+<section class="slide center-y">
+  <div class="logo-corner"><img src="../shared/logos/etrc/etrc-logo.png" alt="经研院"></div>
+  <div class="slide-body">
+    <h2 class="page-title">目 录</h2>
+    <div class="page-wave"><img src="_assets/wave-inner.png" alt=""></div>
+    <ul class="toc">
+      <li>
+        <div class="toc-num">01</div>
+        <div>
+          <div class="toc-title">整体介绍</div>
+          <div class="toc-sub">经研院定位 · 业务架构与数智赋能 · AI 时代的智库变革认知 · 智库 AI 化方法体系 · AI 应用中心承接</div>
+        </div>
+        <div class="toc-pages">P03 ~ P07</div>
+      </li>
+      <li>
+        <div class="toc-num">02</div>
+        <div>
+          <div class="toc-title">四类产品全景</div>
+          <div class="toc-sub">数据资产化 · 业务工具化 · 研究方法智能化 · 协同管理系统化</div>
+        </div>
+        <div class="toc-pages">P08 ~ P21</div>
+      </li>
+      <li>
+        <div class="toc-num">03</div>
+        <div>
+          <div class="toc-title">应用拓展</div>
+          <div class="toc-sub">中心对外应用赋能 · 下一步考虑</div>
+        </div>
+        <div class="toc-pages">P22 ~ P24</div>
+      </li>
+    </ul>
+  </div>
+  <div class="page-footer"><span></span><span class="page-num">02</span></div>
+</section>
+
+</body>
+</html>

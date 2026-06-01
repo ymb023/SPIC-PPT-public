@@ -1,0 +1,159 @@
+/* ============================================
+   SPIC-PPT 标准模板 v4.6.1 · 主题变量
+   纯白底 + hairline + 大字号锚点 + 微阴影
+   依据：国家电投VI规范 + 经研院惯例 + 精致现代设计语言
+   字号体系：投屏可读（v4.3 升级，正文 14pt 起）
+   ============================================ */
+
+:root {
+  /* ====== 品牌四彩（取自经研院LOGO双螺旋） ====== */
+  --brand-orange: #F07800;     /* 橙 */
+  --brand-red: #D20000;        /* 红 */
+  --brand-green: #3C961E;      /* 绿（深） */
+  --brand-lightgreen: #78B41E; /* 嫩绿 */
+
+  /* ====== 品牌权威色 ====== */
+  --brand-navy: #00005A;       /* 深蓝（"国家电投经研院"文字色） */
+  --brand-navy-light: #1B3C6E; /* 浅深蓝（章节标题用） */
+
+  /* ====== 经研院惯例色 ====== */
+  --emphasis-red: #C00000;     /* 关键论点强调红 */
+  --auth-navy: #002060;        /* 副标题/讲者署名深蓝 */
+
+  /* ====== 中性色（v4 升级·灰阶丰富） ====== */
+  --ink-strong: #1A1A1A;       /* 强黑（标题） */
+  --ink-med: #555555;          /* 中灰（正文） */
+  --ink-soft: #888888;         /* 浅灰（次级文字） */
+  --ink-faint: #BBBBBB;        /* 极浅灰 */
+  --text-black: #1A1A1A;       /* 兼容旧变量名 */
+  --text-gray: #555555;
+  --text-light: #888888;
+
+  /* ====== 背景与线条（v4 核心） ====== */
+  --bg-pure: #FFFFFF;          /* 纯白主背景（VI 惯例） */
+  --bg-white: #FFFFFF;         /* 兼容旧变量名 */
+  --bg-soft: #FAFAFA;          /* 极浅灰（局部分区） */
+  --bg-section: #FAFAFA;
+  --hairline: #E8E8E8;         /* 中性 hairline */
+  --hairline-dark: #C9C4B8;    /* 略深的细线 */
+  --border-gray: #E8E8E8;      /* 兼容旧变量名 */
+
+  /* ====== 品牌色浅版（标签底色用，v4.0 兼容） ====== */
+  --soft-red: #FCEFEC;
+  --soft-green: #EEF5ED;
+  --soft-orange: #FCF1E5;
+  --soft-navy: #ECEFF3;
+
+  /* ====== 品牌色透明度阶梯（v4.1 新增，借鉴 Blue Professional） ====== */
+  /* 用于卡片底、强调引用块、半透明强调——给"半色"层次 */
+  --red-04: rgba(210, 0, 0, 0.04);
+  --red-08: rgba(210, 0, 0, 0.08);
+  --red-15: rgba(210, 0, 0, 0.15);
+  --red-20: rgba(210, 0, 0, 0.20);
+  --green-04: rgba(60, 150, 30, 0.04);
+  --green-08: rgba(60, 150, 30, 0.08);
+  --green-15: rgba(60, 150, 30, 0.15);
+  --green-20: rgba(60, 150, 30, 0.20);
+  --orange-04: rgba(240, 120, 0, 0.04);
+  --orange-08: rgba(240, 120, 0, 0.08);
+  --orange-15: rgba(240, 120, 0, 0.15);
+  --orange-20: rgba(240, 120, 0, 0.20);
+  --navy-04: rgba(27, 60, 110, 0.04);
+  --navy-08: rgba(27, 60, 110, 0.08);
+  --navy-15: rgba(27, 60, 110, 0.15);
+  --navy-20: rgba(27, 60, 110, 0.20);
+
+  /* ====== 暖中性灰（v4.1 新增，借鉴 Cartesian） ====== */
+  /* 替代纯灰做装饰线/小字/页码，研究院/百年事务所气质 */
+  --warm-taupe: #8A8178;
+  --warm-taupe-light: #B8B0A4;
+
+  /* ====== 阴影（v4 核心，给白卡浮起来） ====== */
+  --shadow-soft: 0 1px 2px rgba(0,0,0,0.03), 0 0 0 1px rgba(0,0,0,0.025);
+  --shadow-card: 0 4px 12px rgba(0,0,0,0.04), 0 0 0 1px rgba(0,0,0,0.025);
+  --shadow-strong: 0 8px 24px rgba(0,0,0,0.08);
+
+  /* ====== 字体 ====== */
+  --font-cn: "微软雅黑", "Microsoft YaHei", "Noto Sans SC", sans-serif;
+  --font-en: "Arial", "Helvetica", sans-serif;
+  --font-cn-serif: "宋体", "SimSun", serif;
+
+  /* ====== 衬线字体（v4.1 新增，借鉴 Cartesian/Editorial Forest） ====== */
+  /* 限定用于：落款/金句/数字单位/章节扉页副标题——做"语义重音" */
+  /* 不要全文用衬线，否则丢失信息密度感 */
+  --font-cn-editorial: "Source Han Serif SC", "思源宋体", "宋体", "SimSun", serif;
+  --font-en-editorial: "Source Serif 4", "Playfair Display", "Georgia", serif;
+
+  /* ====== 字号体系（v4.3 升级 · 投屏可读性 2026.5.20） ====== */
+  /* 基准：1280×720 投到 3m 屏幕、5-10m 视距，正文 14pt 起步 */
+  /* 经验值：投屏最小 14pt，舒服 16pt+；屏幕阅读可缩 12pt */
+  --fs-cover-title: 38pt;      /* v4.2 36pt → 38pt */
+  --fs-cover-subtitle: 20pt;   /* v4.2 18pt → 20pt */
+  --fs-section-num: 170pt;     /* 大数字保持 */
+  --fs-section-title: 34pt;    /* v4.2 32pt → 34pt */
+  --fs-page-title: 24pt;       /* v4.2 22pt → 24pt（投屏可读） */
+  --fs-page-subtitle: 16pt;    /* v4.2 14pt → 16pt */
+  --fs-body: 14pt;             /* v4.2 12pt → 14pt（投屏正文最小起点） */
+  --fs-body-sm: 13pt;          /* v4.2 11pt → 13pt */
+  --fs-caption: 12pt;          /* v4.2 10pt → 12pt（说明/标签） */
+  --fs-source: 11pt;           /* v4.2 9pt → 11pt（数据来源） */
+
+  /* ====== 字重（v4 新增·极细字重用于大字号） ====== */
+  --fw-ultralight: 100;        /* 超细，用于 100pt+ 大数字 */
+  --fw-light: 200;             /* 细，用于 40pt+ 大数字 */
+  --fw-normal: 400;
+  --fw-medium: 500;
+  --fw-bold: 700;
+
+  /* ====== 间距 ====== */
+  --space-xs: 4pt;
+  --space-sm: 8pt;
+  --space-md: 16pt;
+  --space-lg: 24pt;
+  --space-xl: 32pt;
+
+  /* ====== 幻灯片规格 ====== */
+  --slide-width: 1280px;
+  --slide-height: 720px;
+  --bar-height: 8px;
+  --header-bar-height: 4px;
+}
+
+/* ====== 字体基础设置 ====== */
+html, body {
+  margin: 0;
+  padding: 0;
+  font-family: var(--font-cn);
+  color: var(--ink-strong);
+  background: #2a2a2a;
+  -webkit-font-smoothing: antialiased;
+}
+
+* { box-sizing: border-box; }
+
+.num, .en, [data-en] {
+  font-family: var(--font-en);
+}
+
+/* ====== 幻灯片容器 ====== */
+.slide {
+  width: var(--slide-width);
+  height: var(--slide-height);
+  background: var(--bg-pure);
+  margin: 24px auto;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+  page-break-after: always;
+}
+
+/* ====== 打印优化 ====== */
+@media print {
+  @page { size: 1280px 720px; margin: 0; }
+  html, body { background: white; }
+  .slide {
+    margin: 0;
+    box-shadow: none;
+  }
+  .nav-bar { display: none !important; }
+}

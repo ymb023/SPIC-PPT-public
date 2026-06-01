@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>【标题】 · 经研院</title>
+<link rel="stylesheet" href="theme.css">
+<link rel="stylesheet" href="components.css">
+<style>
+  /* ===== 项目专属样式（按需修改） ===== */
+  .slide-body {
+    padding: 40px 60px 56px 60px;
+    height: 100%;
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+  }
+  /* 封面 */
+  .cover .slide-body {
+    padding: 100px 80px 0 80px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    text-align: center;
+  }
+  .cover-title {
+    font-size: 38pt;
+    color: var(--brand-navy);
+    font-weight: var(--fw-bold);
+    line-height: 1.4;
+    margin: 60pt 0 0 0;
+    letter-spacing: 0.02em;
+  }
+  .cover-subtitle {
+    font-size: 18pt;
+    color: var(--ink-soft);
+    font-weight: 300;
+    margin: 18pt 0 0 0;
+    letter-spacing: 0.1em;
+  }
+  .cover-author {
+    position: absolute;
+    bottom: 180px;
+    left: 0; right: 0;
+    text-align: center;
+    color: var(--auth-navy);
+    font-size: 14pt;
+    z-index: 3;
+  }
+  .cover-author .date {
+    font-size: 12pt;
+    color: var(--ink-soft);
+    margin-top: 6pt;
+  }
+</style>
+</head>
+<body>
+
+<!-- ============ 封面 ============ -->
+<section class="slide cover">
+  <div class="cover-wave">
+    <img src="_assets/wave-cover-plain.png" alt="">
+  </div>
+  <div class="logo-corner">
+    <img src="../shared/logos/etrc/etrc-logo.png" alt="经研院">
+  </div>
+  <div class="slide-body">
+    <h1 class="cover-title">【主标题，可以换行<br>多行展示】</h1>
+    <p class="cover-subtitle">【副标题 · 可选】</p>
+  </div>
+  <div class="cover-author">
+    <div>汇报人：【姓名】</div>
+    <div class="date">【年月】</div>
+  </div>
+</section>
+
+
+<!-- ============ 章节分隔页（v4 编辑设计风） ============ -->
+<section class="slide section-divider">
+  <div class="logo-corner">
+    <img src="../shared/logos/etrc/etrc-logo.png" alt="经研院">
+  </div>
+  <div class="slide-body">
+    <div class="section-left">
+      <div class="section-num">01</div>
+      <div class="section-num-label">P A R T &nbsp; O N E</div>
+    </div>
+    <div class="section-right">
+      <div class="section-label">第 一 部 分</div>
+      <h2 class="title">【章节标题<br>可换行】</h2>
+      <p class="subtitle">【章节副标题/导读，1-2句话】</p>
+      <div class="meta">
+        <div class="meta-item">
+          <div class="num">3<span style="font-size:12pt;">大</span></div>
+          <div class="lbl">【量化指标1】</div>
+        </div>
+        <div class="meta-item">
+          <div class="num">17<span style="font-size:12pt;">%</span></div>
+          <div class="lbl">【量化指标2】</div>
+        </div>
+        <div class="meta-item">
+          <div class="num">5<span style="font-size:12pt;">年</span></div>
+          <div class="lbl">【量化指标3】</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ============ 内页模板 · 复制此段添加新页 ============ -->
+<!--
+  v4 内页核心结构：
+    1. logo-corner（右上角经研院LOGO）
+    2. title-row（标题 + 右侧 meta）
+    3. page-wave（集团固定款波浪分割线）
+    4. key-point（带图标+小标签+左红条的关键论点）
+    5. 主体内容（灵活：6 种版式见下方注释）
+    6. data-source（数据来源，可选）
+    7. page-footer（页码）
+-->
+<section class="slide">
+  <div class="logo-corner">
+    <img src="../shared/logos/etrc/etrc-logo.png" alt="经研院">
+  </div>
+
+  <div class="slide-body">
+    <!-- 标题区（带右侧 meta 编辑设计风） -->
+    <div class="title-row">
+      <h2>【页面主标题】</h2>
+      <div class="meta">第 X 部分 · 02</div>
+    </div>
+
+    <!-- 集团固定款细波浪线 -->
+    <div class="page-wave"><img src="_assets/wave-inner.png" alt=""></div>
+
+    <!-- 关键论点（带图标+小标签） -->
+    <div class="key-point">
+      <svg class="key-point-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="9"></circle>
+        <path d="M9 12 L11 14 L15 10"></path>
+      </svg>
+      <div>
+        <span class="key-point-tag">核 心 判 断</span>
+        <p>【核心论点。关键数据用 <span class="accent">红色加粗</span>。】</p>
+      </div>
+    </div>
+
+    <!-- ▼▼ 主体内容区（从以下六种版式选一个） ▼▼ -->
+
+    <!-- 版式 A · 三栏 mini-card（4-6 字编号 + 大标题 + 描述）
+    <div class="mini-cards">
+      <div class="mini-card">
+        <div class="num">01 / 【分类】</div>
+        <h4>【小标题】</h4>
+        <p>【描述。关键词 <span class="red">高亮</span>。】</p>
+      </div>
+      ... (2 more)
+    </div>
+    -->
+
+    <!-- 版式 B · 三栏大卡片（大数字+英文小标+标签丝带）
+    <div class="three-cards">
+      <div class="card">
+        <div class="card-head">
+          <div class="card-num">01</div>
+          <div>
+            <div class="card-title">【标题】</div>
+            <div class="card-title-sub">SUBTITLE EN</div>
+          </div>
+        </div>
+        <div class="card-body">
+          <p>【描述，可用 <strong>加粗</strong>。】</p>
+        </div>
+        <div class="card-tags">
+          <span class="tag is-orange">【标签1】</span>
+          <span class="tag is-orange">【标签2】</span>
+        </div>
+      </div>
+      ... (2 more, use is-red / is-green tags)
+    </div>
+    -->
+
+    <!-- 版式 C · 数据指标墙（4 个大数字）
+    <div class="metric-wall">
+      <div class="metric">
+        <div class="metric-number">17<span class="metric-unit">%</span></div>
+        <div class="metric-label">【指标说明】</div>
+      </div>
+      ... (3 more)
+    </div>
+    -->
+
+    <!-- 版式 D · 编号点列（4 项要点）
+    <ul class="point-list">
+      <li>
+        <span class="ord">01</span>
+        <div>
+          <span class="lead">【要点标题】</span>
+          <span class="desc">【描述。关键数据 <span class="text-red">高亮</span>。】</span>
+        </div>
+      </li>
+      ... (3 more)
+    </ul>
+    -->
+
+    <!-- 版式 E · 时间线
+    <div class="timeline">
+      <div class="timeline-step">
+        <div class="timeline-year">2025</div>
+        <div class="timeline-text">【说明】</div>
+      </div>
+      ... (3 more)
+    </div>
+    -->
+
+    <!-- 版式 F · 全宽图表
+    <div class="chart-frame">
+      <img src="_images/extracted/image_NN.png" alt="">
+    </div>
+    <div class="chart-caption">【图表标题】</div>
+    -->
+
+  </div>
+
+  <!-- 数据来源（可选） -->
+  <div class="data-source">【数据来源】</div>
+
+  <div class="page-footer">
+    <span></span>
+    <span class="page-num">02</span>
+  </div>
+</section>
+
+
+<!-- ============ 尾页 ============ -->
+<section class="slide cover">
+  <div class="cover-wave">
+    <img src="_assets/wave-cover-plain.png" alt="">
+  </div>
+  <div class="logo-corner">
+    <img src="../shared/logos/etrc/etrc-logo.png" alt="经研院">
+  </div>
+  <div class="slide-body" style="justify-content:center;">
+    <p style="font-size:40pt;margin:0;font-weight:300;letter-spacing:0.5em;color:var(--ink-strong);">
+      <span style="color:var(--brand-green);">风</span><span style="color:var(--brand-red);">光</span>无限　国家电投
+    </p>
+  </div>
+</section>
+
+</body>
+</html>

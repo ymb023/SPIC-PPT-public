@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>标准模板 v4 示例 · 经研院汇报演示文稿</title>
+<link rel="stylesheet" href="theme.css">
+<link rel="stylesheet" href="components.css">
+<style>
+  .slide-body {
+    padding: 40px 60px 56px 60px;
+    height: 100%;
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+  }
+  /* 封面 */
+  .cover .slide-body {
+    padding: 100px 80px 0 80px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    text-align: center;
+  }
+  .cover-title {
+    font-size: 38pt;
+    color: var(--brand-navy);
+    font-weight: var(--fw-bold);
+    line-height: 1.4;
+    margin: 60pt 0 0 0;
+    letter-spacing: 0.02em;
+  }
+  .cover-subtitle {
+    font-size: 18pt;
+    color: var(--ink-soft);
+    font-weight: 300;
+    margin: 18pt 0 0 0;
+    letter-spacing: 0.1em;
+  }
+  .cover-author {
+    position: absolute;
+    bottom: 180px;
+    left: 0; right: 0;
+    text-align: center;
+    color: var(--auth-navy);
+    font-size: 14pt;
+    z-index: 3;
+  }
+  .cover-author .date {
+    font-size: 12pt;
+    color: var(--ink-soft);
+    margin-top: 6pt;
+  }
+  .nav-bar {
+    position: fixed;
+    top: 12px; right: 12px;
+    background: rgba(0,0,0,0.7);
+    color: white;
+    padding: 8px 14px;
+    border-radius: 4px;
+    font-size: 12px;
+    z-index: 1000;
+    font-family: monospace;
+  }
+  /* 双栏图表+表格的wrapper */
+  .dual-chart {
+    display: grid;
+    grid-template-columns: 1fr 1.2fr;
+    gap: 24pt;
+    flex: 1;
+    margin-top: 8pt;
+  }
+  /* 双栏文字结论 */
+  .dual-conclusion {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 28pt;
+    flex: 1;
+    margin-top: 12pt;
+  }
+  .dual-conclusion .col {
+    display: flex;
+    flex-direction: column;
+  }
+  .dual-conclusion .col-head {
+    font-size: 16pt;
+    color: var(--ink-strong);
+    font-weight: var(--fw-bold);
+    margin-bottom: 14pt;
+    padding-bottom: 10pt;
+    border-bottom: 2px solid var(--brand-green);
+  }
+  .dual-conclusion .col:nth-child(2) .col-head { border-bottom-color: var(--brand-orange); }
+  .dual-conclusion ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+  }
+  .dual-conclusion ul li {
+    padding: 10pt 0;
+    border-bottom: 1px dashed var(--hairline);
+    font-size: 11.5pt;
+    line-height: 1.8;
+    color: var(--ink-med);
+  }
+  .dual-conclusion ul li:last-child { border-bottom: none; }
+  .dual-conclusion ul li .ord {
+    font-family: var(--font-en);
+    font-size: 14pt;
+    font-weight: var(--fw-bold);
+    margin-right: 8pt;
+  }
+  .dual-conclusion .col:nth-child(1) ul li:nth-child(1) .ord { color: var(--brand-orange); }
+  .dual-conclusion .col:nth-child(1) ul li:nth-child(2) .ord { color: var(--brand-red); }
+  .dual-conclusion .col:nth-child(1) ul li:nth-child(3) .ord { color: var(--brand-green); }
+  .dual-conclusion .col:nth-child(2) ul li:nth-child(1) .ord { color: var(--brand-orange); }
+  .dual-conclusion .col:nth-child(2) ul li:nth-child(2) .ord { color: var(--brand-red); }
+  .dual-conclusion .col:nth-child(2) ul li:nth-child(3) .ord { color: var(--brand-green); }
+  .dual-conclusion .col-lead { font-weight: var(--fw-bold); color: var(--ink-strong); }
+</style>
+</head>
+<body>
+
+<div class="nav-bar">标准模板 v4 · 纯白底 + hairline + 大字号锚点</div>
+
+<!-- ============ P1 封面 ============ -->
+<section class="slide cover">
+  <div class="cover-wave">
+    <img src="_assets/wave-cover-plain.png" alt="">
+  </div>
+  <div class="logo-corner">
+    <img src="../shared/logos/etrc/etrc-logo.png" alt="经研院">
+  </div>
+  <div class="slide-body">
+    <h1 class="cover-title">
+      "双碳"目标下新能源高质量<br>发展路径探讨
+    </h1>
+    <p class="cover-subtitle">研 究 成 果 汇 报</p>
+  </div>
+  <div class="cover-author">
+    <div>汇报人：【姓名】</div>
+    <div class="date">二〇二六年五月</div>
+  </div>
+</section>
+
+<!-- ============ P2 章节分隔页 ============ -->
+<section class="slide section-divider">
+  <div class="logo-corner">
+    <img src="../shared/logos/etrc/etrc-logo.png" alt="经研院">
+  </div>
+  <div class="slide-body">
+    <div class="section-left">
+      <div class="section-num">01</div>
+      <div class="section-num-label">P A R T &nbsp; O N E</div>
+    </div>
+    <div class="section-right">
+      <span class="double-rule" style="color:var(--brand-red);margin-bottom:18pt;">第 一 部 分</span>
+      <h2 class="title" style="margin-top:18pt;">能源行业三大转折<br>与发展新形势</h2>
+      <p class="subtitle">从能源结构、市场逻辑、管理逻辑三个维度，看"十五五"时期的关键攻坚期。</p>
+      <div class="meta">
+        <div class="meta-item">
+          <div class="num">3</div>
+          <div class="lbl">大转折</div>
+        </div>
+        <div class="meta-item">
+          <div class="num">5</div>
+          <div class="lbl">年攻坚期</div>
+        </div>
+        <div class="meta-item">
+          <div class="num">50<span style="font-size:12pt;">%+</span></div>
+          <div class="lbl">非化石占比</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ P3 内页 · 关键论点 + 三栏mini-card ============ -->
+<section class="slide">
+  <div class="logo-corner">
+    <img src="../shared/logos/etrc/etrc-logo.png" alt="经研院">
+  </div>
+  <div class="slide-body">
+    <div class="title-row">
+      <h2>"十五五"时期能源行业面临三大转折</h2>
+    </div>
+    <div class="page-wave"><img src="_assets/wave-inner.png" alt=""></div>
+
+    <div class="key-point">
+      <svg class="key-point-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="9"></circle>
+        <path d="M9 12 L11 14 L15 10"></path>
+      </svg>
+      <div>
+        <span class="key-point-tag">核 心 判 断</span>
+        <p>能源行业正处于<span class="accent">能源结构、市场逻辑、管理逻辑</span>同时转向的历史时期，未来五年是从"<span class="accent">量的积累</span>"迈向"<span class="accent">质的跃升</span>"的关键攻坚期。</p>
+      </div>
+    </div>
+
+    <div class="mini-cards">
+      <div class="mini-card">
+        <div class="num">01 / 能源结构</div>
+        <h4>从化石主导<br>到非化石主导</h4>
+        <p>2030 年非化石能源发电量<span class="red">历史性超过化石能源</span>，能源结构发生根本转换。</p>
+      </div>
+      <div class="mini-card">
+        <div class="num">02 / 市场逻辑</div>
+        <h4>从规模驱动<br>到价值驱动</h4>
+        <p>136 号文后<span class="red">"唯规模论"失效</span>，全国统一电力市场让价值赢家通吃。</p>
+      </div>
+      <div class="mini-card">
+        <div class="num">03 / 管理逻辑</div>
+        <h4>从能耗双控<br>到碳排放双控</h4>
+        <p>"十五五"单位 GDP 能耗下降 <span class="red">10%</span>、碳排放降 <span class="red">17%</span>，管理范式重塑。</p>
+      </div>
+    </div>
+  </div>
+  <div class="page-footer">
+    <span></span>
+    <span class="page-num">03</span>
+  </div>
+</section>
+
+<!-- ============ P4 内页 · 全宽图表 ============ -->
+<section class="slide">
+  <div class="logo-corner">
+    <img src="../shared/logos/etrc/etrc-logo.png" alt="经研院">
+  </div>
+  <div class="slide-body">
+    <div class="title-row">
+      <h2>"十五五"我国一次能源消费需求结构展望</h2>
+    </div>
+    <div class="page-wave"><img src="_assets/wave-inner.png" alt=""></div>
+
+    <div class="key-point">
+      <svg class="key-point-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M3 17 L9 11 L13 15 L21 7"></path>
+        <polyline points="14 7 21 7 21 14"></polyline>
+      </svg>
+      <div>
+        <span class="key-point-tag">政 策 锚 点</span>
+        <p>2021年10月，中共中央、国务院印发<span class="accent">《关于完整准确全面贯彻新发展理念做好碳达峰碳中和工作的意见》</span>，明确到 2025 年非化石能源消费比重达到 <span class="accent">20%</span> 左右；到 2030 年达到 <span class="accent">25%</span> 左右；到 2060 年达到 <span class="accent">80%</span> 以上。</p>
+      </div>
+    </div>
+
+    <div class="chart-frame" style="flex:1;display:flex;align-items:center;justify-content:center;">
+      <div style="height:260px;width:100%;background:linear-gradient(180deg, #F5F9FC 0%, #ECF4F8 100%);display:flex;align-items:center;justify-content:center;color:#557788;font-size:12pt;">
+        [ 2020–2060 年一次能源消费需求结构 · 全宽折线/堆积图 ]
+      </div>
+    </div>
+    <div class="chart-caption">2020-2060年一次能源消费需求结构</div>
+  </div>
+  <div class="data-source">中国工程院《电力行业碳达峰碳中和实施路径研究》</div>
+  <div class="page-footer">
+    <span></span>
+    <span class="page-num">04</span>
+  </div>
+</section>
+
+<!-- ============ P5 内页 · 编号点列 ============ -->
+<section class="slide compact">
+  <div class="logo-corner">
+    <img src="../shared/logos/etrc/etrc-logo.png" alt="经研院">
+  </div>
+  <div class="slide-body">
+    <div class="title-row">
+      <h2>电力市场化改革持续深化的四个标志</h2>
+    </div>
+    <div class="page-wave"><img src="_assets/wave-inner.png" alt=""></div>
+
+    <div class="key-point">
+      <svg class="key-point-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M3 12 L21 12"></path><path d="M3 6 L21 6"></path><path d="M3 18 L21 18"></path>
+      </svg>
+      <div>
+        <span class="key-point-tag">市 场 重 构</span>
+        <p>2025 年是全国统一电力市场<span class="accent">初步建成</span>的关键时间节点，<span class="accent">136 号文</span>发布后新能源发电将全面入市。</p>
+      </div>
+    </div>
+
+    <ol class="auto-list" style="flex:1;display:flex;flex-direction:column;justify-content:space-around;">
+      <li>
+        <span class="lead">现货市场全年覆盖</span>
+        <span class="desc">2026 年全国现货市场平均运行时间从去年的 6.5 个月覆盖至全年，市场化电量占比突破 <span class="text-red">70%</span>。</span>
+      </li>
+      <li>
+        <span class="lead">新能源全电量入市</span>
+        <span class="desc">保障电量取消，转化为市场化交易的"机制电量"，风光结算均价将持续下降。</span>
+      </li>
+      <li>
+        <span class="lead">辅助服务市场扩容</span>
+        <span class="desc">新型储能参与现货、辅助服务和容量市场，<span class="text-red">"四维价值"</span>体系逐步成形。</span>
+      </li>
+      <li>
+        <span class="lead">跨区域电力互济</span>
+        <span class="desc">优化全国电力流向，"三北"风光、西南水风光一体化、沿海核电、海上风电基地协同。</span>
+      </li>
+    </ol>
+  </div>
+  <div class="page-footer">
+    <span></span>
+    <span class="page-num">05</span>
+  </div>
+</section>
+
+<!-- ============ P6 内页 · 数据指标墙 ============ -->
+<section class="slide">
+  <div class="logo-corner">
+    <img src="../shared/logos/etrc/etrc-logo.png" alt="经研院">
+  </div>
+  <div class="slide-body">
+    <div class="title-row">
+      <h2>"十五五"能源行业关键量化指标</h2>
+    </div>
+    <div class="page-wave"><img src="_assets/wave-inner.png" alt=""></div>
+
+    <div class="key-point">
+      <svg class="key-point-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="3" y="3" width="7" height="7"></rect>
+        <rect x="14" y="3" width="7" height="7"></rect>
+        <rect x="3" y="14" width="7" height="7"></rect>
+        <rect x="14" y="14" width="7" height="7"></rect>
+      </svg>
+      <div>
+        <span class="key-point-tag">硬 约 束 指 标</span>
+        <p>《"十五五"规划纲要》明确了四组核心量化目标，构成能源行业未来五年的<span class="accent">"硬约束"</span>——少一个完不成都会被追责。</p>
+      </div>
+    </div>
+
+    <div class="metric-wall">
+      <div class="metric">
+        <div class="metric-number">17<span class="metric-unit">%</span></div>
+        <div class="metric-label">单位GDP二氧化碳<br>排放降低</div>
+      </div>
+      <div class="metric">
+        <div class="metric-number">10<span class="metric-unit">%</span></div>
+        <div class="metric-label">单位GDP能耗<br>下降左右</div>
+      </div>
+      <div class="metric">
+        <div class="metric-number">58<span class="metric-unit">亿吨</span></div>
+        <div class="metric-label">能源综合<br>生产能力（标准煤）</div>
+      </div>
+      <div class="metric">
+        <div class="metric-number">50<span class="metric-unit">%+</span></div>
+        <div class="metric-label">非化石能源<br>发电量占比</div>
+      </div>
+    </div>
+  </div>
+  <div class="data-source">《"十五五"规划纲要》</div>
+  <div class="page-footer">
+    <span></span>
+    <span class="page-num">06</span>
+  </div>
+</section>
+
+<!-- ============ P7 内页 · 三栏卡片 ============ -->
+<section class="slide">
+  <div class="logo-corner">
+    <img src="../shared/logos/etrc/etrc-logo.png" alt="经研院">
+  </div>
+  <div class="slide-body">
+    <div class="title-row">
+      <h2>集团"十五五"战略落地三大抓手</h2>
+    </div>
+    <div class="page-wave"><img src="_assets/wave-inner.png" alt=""></div>
+
+    <div class="key-point">
+      <svg class="key-point-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="9"></circle>
+        <circle cx="12" cy="12" r="4"></circle>
+        <line x1="12" y1="2" x2="12" y2="6"></line>
+      </svg>
+      <div>
+        <span class="key-point-tag">战 略 抓 手</span>
+        <p>围绕"<span class="accent">矢志创一流、奋斗八百亿</span>"战略目标，建议在<span class="accent">战略层 · 业务层 · 能力层</span>三个层面同步推进。</p>
+      </div>
+    </div>
+
+    <div class="three-cards">
+      <div class="card">
+        <div class="card-head">
+          <div class="card-num">01</div>
+          <div>
+            <div class="card-title">战略层 · 保持定力</div>
+            <div class="card-title-sub">STRATEGIC ANCHOR</div>
+          </div>
+        </div>
+        <div class="card-body">
+          <p>坚定走"<strong>均衡增长战略</strong>"道路，把建设世界一流清洁能源企业的愿景与国家"十五五"发展方向统一起来。</p>
+        </div>
+        <div class="card-tags">
+          <span class="tag is-orange">2030 世界一流</span>
+          <span class="tag is-orange">均衡增长</span>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-head">
+          <div class="card-num">02</div>
+          <div>
+            <div class="card-title">业务层 · 突出主业</div>
+            <div class="card-title-sub">BUSINESS FOCUS</div>
+          </div>
+        </div>
+        <div class="card-body">
+          <p>"<strong>3+1</strong>"主业格局做深做实，核电、铝业、新能源、煤电、燃机、氢基六大领域专项规划齐头并进。</p>
+        </div>
+        <div class="card-tags">
+          <span class="tag is-red">3+1 主业</span>
+          <span class="tag is-red">六大专项</span>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-head">
+          <div class="card-num">03</div>
+          <div>
+            <div class="card-title">能力层 · 科技驱动</div>
+            <div class="card-title-sub">CAPABILITY ENGINE</div>
+          </div>
+        </div>
+        <div class="card-body">
+          <p>钍基熔盐堆"<strong>头号工程</strong>"、重型燃机产业化、绿色氢基自主可控、AI 赋能能源央企"必答题"。</p>
+        </div>
+        <div class="card-tags">
+          <span class="tag is-green">钍基熔盐堆</span>
+          <span class="tag is-green">AI 赋能</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="data-source">国家电投2026年工作会议工作报告、董事长研讨班讲话</div>
+  <div class="page-footer">
+    <span></span>
+    <span class="page-num">07</span>
+  </div>
+</section>
+
+<!-- ============ P8 内页 · 时间线 ============ -->
+<section class="slide">
+  <div class="logo-corner">
+    <img src="../shared/logos/etrc/etrc-logo.png" alt="经研院">
+  </div>
+  <div class="slide-body">
+    <div class="title-row">
+      <h2>能源行业三十年战略演进路径</h2>
+    </div>
+    <div class="page-wave"><img src="_assets/wave-inner.png" alt=""></div>
+
+    <div class="key-point">
+      <svg class="key-point-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="10"></circle>
+        <polyline points="12 6 12 12 16 14"></polyline>
+      </svg>
+      <div>
+        <span class="key-point-tag">战 略 演 进</span>
+        <p>从"<span class="accent">十一五</span>"提出能源结构调整，到"<span class="accent">十五五</span>"碳达峰目标如期实现，再到 <span class="accent">2060 年</span> 碳中和愿景——能源行业进入"<span class="accent">以非化石能源为主</span>"的历史性新阶段。</p>
+      </div>
+    </div>
+
+    <div class="timeline">
+      <div class="timeline-step">
+        <div class="timeline-year">2025</div>
+        <div class="timeline-text">"十四五"收官<br>非化石能源占比 <span class="text-red bold">20%</span></div>
+      </div>
+      <div class="timeline-step">
+        <div class="timeline-year">2030</div>
+        <div class="timeline-text">"十五五"末<br>碳达峰如期实现<br>非化石能源 <span class="text-red bold">25%+</span></div>
+      </div>
+      <div class="timeline-step">
+        <div class="timeline-year">2035</div>
+        <div class="timeline-text">能源强国建成<br>新型能源体系成熟</div>
+      </div>
+      <div class="timeline-step">
+        <div class="timeline-year">2060</div>
+        <div class="timeline-text">碳中和愿景实现<br>非化石能源 <span class="text-red bold">80%+</span></div>
+      </div>
+    </div>
+
+    <div style="margin-top:20pt;padding:14pt 18pt;background:var(--bg-soft);border-left:3px solid var(--brand-navy-light);font-size:11.5pt;line-height:1.7;color:var(--ink-med);">
+      <span class="text-navy bold">研判：</span>2030-2035 年是新型电力系统从"建成"到"成熟"的关键过渡期，<span class="text-red">"十五五"是承前启后的攻坚五年</span>。
+    </div>
+  </div>
+  <div class="page-footer">
+    <span></span>
+    <span class="page-num">08</span>
+  </div>
+</section>
+
+<!-- ============ P9 内页 · 双栏文字结论 ============ -->
+<section class="slide">
+  <div class="logo-corner">
+    <img src="../shared/logos/etrc/etrc-logo.png" alt="经研院">
+  </div>
+  <div class="slide-body">
+    <div class="title-row">
+      <h2>研究结论与对集团的启示</h2>
+    </div>
+    <div class="page-wave"><img src="_assets/wave-inner.png" alt=""></div>
+
+    <div class="key-point">
+      <svg class="key-point-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M9 11 L12 14 L22 4"></path>
+        <path d="M21 12 V19 a2 2 0 0 1 -2 2 H5 a2 2 0 0 1 -2 -2 V5 a2 2 0 0 1 2 -2 H16"></path>
+      </svg>
+      <div>
+        <span class="key-point-tag">结 构 性 变 革</span>
+        <p>能源行业正在经历的不是"周期性波动"，而是<span class="accent">"结构性变革"</span>——能否准确识变、科学应变、主动求变，决定了未来五年的行业排位。</p>
+      </div>
+    </div>
+
+    <div class="dual-conclusion">
+      <div class="col">
+        <div class="col-head">一、研究结论</div>
+        <ul>
+          <li><span class="ord">01</span><span class="col-lead">能源结构转型加速</span><br><span style="margin-left:24pt;">非化石能源占比将<span class="text-red">历史性超过化石能源</span>，2030 年非化石发电量占比 50%+</span></li>
+          <li><span class="ord">02</span><span class="col-lead">市场化改革深化</span><br><span style="margin-left:24pt;">全国统一电力市场基本建成，电力进入<span class="text-red">"四维价值"</span>时代</span></li>
+          <li><span class="ord">03</span><span class="col-lead">管理逻辑重塑</span><br><span style="margin-left:24pt;">能耗双控转向<span class="text-red">碳排放双控</span>，绿色价值变现机制成熟</span></li>
+        </ul>
+      </div>
+      <div class="col">
+        <div class="col-head">二、对集团的启示</div>
+        <ul>
+          <li><span class="ord">01</span><span class="col-lead">战略上 · 守住"均衡增长"定力</span><br><span style="margin-left:24pt;">坚定走<span class="text-red">"均衡增长战略"</span>道路，把握"十五五"窗口期</span></li>
+          <li><span class="ord">02</span><span class="col-lead">业务上 · 聚焦三大主业</span><br><span style="margin-left:24pt;">核电、铝业、新能源作为<span class="text-red">利润支柱</span>，"3+1"主业做深做实</span></li>
+          <li><span class="ord">03</span><span class="col-lead">能力上 · 科技驱动</span><br><span style="margin-left:24pt;">钍基熔盐堆+重燃产业化+AI 赋能，构建<span class="text-red">差异化竞争优势</span></span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="page-footer">
+    <span></span>
+    <span class="page-num">09</span>
+  </div>
+</section>
+
+<!-- ============ P10 尾页 ============ -->
+<section class="slide cover">
+  <div class="cover-wave">
+    <img src="_assets/wave-cover-plain.png" alt="">
+  </div>
+  <div class="logo-corner">
+    <img src="../shared/logos/etrc/etrc-logo.png" alt="经研院">
+  </div>
+  <div class="slide-body" style="justify-content:center;">
+    <p style="font-size:40pt;margin:0;font-weight:300;letter-spacing:0.5em;color:var(--ink-strong);">
+      <span style="color:var(--brand-green);">风</span><span style="color:var(--brand-red);">光</span>无限　国家电投
+    </p>
+  </div>
+</section>
+
+</body>
+</html>
