@@ -313,6 +313,64 @@ def check_templates_double_track(skill_dir: Path, rpt: Report) -> None:
         rpt.ok("no legacy templates/ directory (single-track OK)")
 
 
+def check_version_consistency(skill_dir: Path, rpt: Report) -> None:
+    """版本号三处必须一致：VERSION / SKILL.md frontmatter / README 当前版本行。
+
+    历史教训：升版本时反复漏改 README 的"当前版本"行（靠记得=必漏）。
+    把一致性变成可检测的失败，焊进 health check。
+    """
+    versions: dict[str, str] = {}
+
+    # 1) VERSION 文件
+    vf = skill_dir / "VERSION"
+    if vf.exists():
+        versions["VERSION"] = vf.read_text(encoding="utf-8").strip()
+
+    # 2) SKILL.md frontmatter version
+    skill_md = skill_dir / "SKILL.md"
+    if skill_md.exists():
+        m = FRONTMATTER_RE.match(skill_md.read_text(encoding="utf-8"))
+        if m:
+            try:
+                data = yaml.safe_load(m.group(1))
+                if isinstance(data, dict) and data.get("version") is not None:
+                    versions["SKILL.md"] = str(data["version"]).strip()
+            except yaml.YAMLError:
+                pass
+
+    # 3) README 当前版本行（当前版本：**vX.Y.Z**）
+    readme = skill_dir / "README.md"
+    if readme.exists():
+        rm = re.search(
+            r"当前版本[：:]\s*\*{0,2}v?([0-9]+\.[0-9]+\.[0-9]+)",
+            readme.read_text(encoding="utf-8"),
+        )
+        if rm:
+            versions["README.md"] = rm.group(1)
+
+    if len(versions) < 2:
+        rpt.warn(
+            "version consistency: 不足两处可比对",
+            f"found: {versions}",
+        )
+        return
+
+    # 归一化（去掉可能的前导 v）后比较
+    norm = {k: v.lstrip("vV") for k, v in versions.items()}
+    distinct = set(norm.values())
+    if len(distinct) == 1:
+        rpt.ok(
+            f"version consistent across {len(versions)} sources: "
+            f"v{next(iter(distinct))}"
+        )
+    else:
+        detail = "\n".join(f"  {k}: {v}" for k, v in versions.items())
+        rpt.fail(
+            "version MISMATCH across sources (升版本时漏改了某处)",
+            detail + "\nfix: 三处统一到同一版本号",
+        )
+
+
 def check_components_features(skill_dir: Path, rpt: Report) -> None:
     css = skill_dir / "template" / "components.css"
     if not css.exists():
@@ -371,6 +429,7 @@ def main() -> int:
     check_core_files(skill_dir, rpt)
     check_templates_double_track(skill_dir, rpt)
     check_components_features(skill_dir, rpt)
+    check_version_consistency(skill_dir, rpt)
 
     print()
     summary = (

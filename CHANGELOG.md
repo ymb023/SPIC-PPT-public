@@ -4,6 +4,16 @@
 
 ---
 
+## [4.8.1] — 2026-06-05 · 修复 README 版本漏更 + 版本一致性焊进 health_check
+
+用户发现：GitHub 主页 README"当前版本"行一直停在 v4.6.1——升版本时反复漏改 README 这一处（4.7.0、4.8.0 两次都漏）。根因是"六处同步"靠记得，又掉进本 skill 一路在批判的"靠 AI 记得"坑。
+
+### Fixed
+- **README"当前版本"行**：v4.6.1 → v4.8.1，与 VERSION / SKILL.md frontmatter 对齐。
+
+### Added
+- **`health_check.py` 版本一致性检查**：比对 VERSION / SKILL.md frontmatter / README"当前版本"行三处，不一致即 FAIL。把"升版本漏改某处"从"事后被用户发现"变成"health_check 立即报错"——同本 skill"焊进结构、不靠记得"的根治哲学。负向测试验证：改坏 README → exit 1。
+
 ## [4.8.0] — 2026-06-05 · 版本快照（导出自动留底，可找回旧版）
 
 用户反馈：制作 PPT 时常需找回旧版，但成品 HTML/PDF 每次都原地覆盖——根因是压根没有版本控制。

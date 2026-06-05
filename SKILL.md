@@ -1,6 +1,6 @@
 ---
 name: spic-ppt
-version: 4.8.0
+version: 4.8.1
 description: >-
   Use when the user has an existing research report, outline, or written
   manuscript and wants to convert it into a polished HTML+PDF presentation deck
