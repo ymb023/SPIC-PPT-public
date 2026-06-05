@@ -128,7 +128,7 @@ IMG_SRC_RE = re.compile(
 )
 
 # 默认跳过的目录（递归扫描 HTML 时）
-SKIP_DIRS = {"_preview", "node_modules", ".git", "__pycache__"}
+SKIP_DIRS = {"_preview", "_versions", "node_modules", ".git", "__pycache__"}
 
 
 def check_frontmatter(skill_dir: Path, rpt: Report) -> None:

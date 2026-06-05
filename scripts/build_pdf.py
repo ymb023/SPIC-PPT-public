@@ -31,9 +31,14 @@ from __future__ import annotations
 
 import argparse
 import os
+import shutil
 import subprocess
 import sys
+from datetime import datetime
 from pathlib import Path
+
+# 历史版本快照目录名（与成品 HTML 同级）
+VERSIONS_DIR = "_versions"
 
 # 复用 check_overflow 的检测逻辑与 Chrome 查找——不重复造轮子
 sys.path.insert(0, str(Path(__file__).resolve().parent))
@@ -54,6 +59,29 @@ RED = "\033[31m" if SUPPORTS_COLOR else ""
 GREEN = "\033[32m" if SUPPORTS_COLOR else ""
 BOLD = "\033[1m" if SUPPORTS_COLOR else ""
 RESET = "\033[0m" if SUPPORTS_COLOR else ""
+
+
+def snapshot_before_overwrite(*paths: Path) -> int:
+    """覆盖前把已存在的成品文件快照进 _versions/。
+
+    每个传入路径若已存在，复制一份带秒级时间戳的副本到同级 _versions/，
+    命名 <basename>_<YYYYMMDD-HHMMSS>.<ext>。不存在的路径静默跳过（首次导出）。
+    返回实际快照的文件数。
+
+    这是版本留底机制：每次导出前自动留旧版，绕不开、不靠记得。
+    恢复时直接打开 _versions/ 里的文件即可。
+    """
+    stamp = datetime.now().strftime("%Y%m%d-%H%M%S")
+    count = 0
+    for p in paths:
+        if not p.exists():
+            continue
+        vdir = p.parent / VERSIONS_DIR
+        vdir.mkdir(exist_ok=True)
+        dest = vdir / f"{p.stem}_{stamp}{p.suffix}"
+        shutil.copy2(p, dest)
+        count += 1
+    return count
 
 
 def export_pdf(html_path: Path, pdf_path: Path) -> int:
@@ -118,11 +146,18 @@ def main() -> None:
     else:
         print(f"{RED}[!] --force：跳过溢出闸门{RESET}\n")
 
+    # ---- 覆盖前留底：把上一版 HTML+PDF 快照进 _versions/ ----
+    n = snapshot_before_overwrite(args.html, pdf_path)
+    if n:
+        print(f"{GREEN}✓ 已留底上一版 {n} 个文件 → "
+              f"{args.html.parent / VERSIONS_DIR}{RESET}")
+
     # ---- 导出 ----
     print(f"{BOLD}[2/2] 导出 PDF…{RESET}")
     code = export_pdf(args.html, pdf_path)
     if code == 0:
         print(f"{GREEN}{BOLD}✓ 已导出：{RESET}{pdf_path}")
+        print(f"  找回旧版：打开 {args.html.parent / VERSIONS_DIR}/ 里带时间戳的文件")
     sys.exit(code)
 
 

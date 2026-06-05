@@ -1,6 +1,6 @@
 ---
 name: spic-ppt
-version: 4.7.0
+version: 4.8.0
 description: >-
   Use when the user has an existing research report, outline, or written
   manuscript and wants to convert it into a polished HTML+PDF presentation deck
@@ -256,8 +256,13 @@ for idx in [0, len(doc)//4, len(doc)//2, 3*len(doc)//4, len(doc)-1]:
 ├── 成品PPT.pdf
 ├── 结构抽取_V2.md
 ├── _extracted/                # 权威原文汇编（如有）
-└── _preview/                  # 抽样PNG（验证用）
+├── _preview/                  # 抽样PNG（验证用）
+└── _versions/                 # 历史版本快照（自动留底，见下）
 ```
+
+**版本留底（自动，无需操心）**：每次用 `build_pdf.py` 导出前，会自动把上一版 `成品PPT.html` 和 `成品PPT.pdf` 复制进 `_versions/`，命名带秒级时间戳（如 `成品PPT_20260605-143012.html`）。
+
+**找回旧版**：直接打开 `_versions/` 里对应时间戳的文件（浏览器/WPS 看 HTML，双击看 PDF）。要把某旧版变回当前版，复制出来改回 `成品PPT.html` 即可。中间编辑不快照——只有"导出"才是一个值得留的版本。
 
 ---
 
