@@ -1,6 +1,6 @@
 ---
 name: spic-ppt
-version: 4.8.1
+version: 4.8.2
 description: >-
   Use when the user has an existing research report, outline, or written
   manuscript and wants to convert it into a polished HTML+PDF presentation deck
@@ -151,23 +151,7 @@ python scripts/extract_images.py <成稿路径> _images/extracted
 
 **视觉饱满**（撑满版面是你自带的能力，这里只给数值锚点）：下方留白 > 25% 即空洞，需撑满——主体用 `flex:1` + `justify-content:space-around` 铺满全高；卡片 `min-height:220-240px`、数据墙 `200px+`、列表项 `60pt+`；内容实在少时改用 `.center-y`（见下），不要靠"留白美学"糊弄。
 
-**v4 视觉系统核心要点**（精致现代风 · 2026.5.19 升级）：
-
-**不要**用深色块/重底色（党政标语感），**要**用以下手法撑视觉：
-- **纯白底**（VI 惯例 `#FFFFFF`）—— 不要米色不要浅灰
-- **hairline 边框**（`1px solid #E8E8E8`）+ 微阴影 `0 4px 12px rgba(0,0,0,0.04)` → 白卡浮起来
-- **大字号 + 极细字重**：章节大数字 170pt × `font-weight:100`；卡片编号 46pt × `font-weight:200` —— 视觉重量足够但不沉重
-- **顶部 3px 细色线**做卡片识别（橙/红/绿），不用大色块填充
-- **小标签丝带**：`<span class="key-point-tag">核 心 判 断</span>` 浅红底 + 红字 + 字间距 0.2em
-- **章节分隔页**：左侧超大数字 + hairline 竖线 + 右侧标题/量化指标 + 左下浅红光晕装饰
-- **图标用 SVG 线条**（stroke 1.6pt），不用粗实心徽章
-- **品牌色比例 ≤ 20%**：大部分白底+黑字，只在关键位置用品牌色点缀
-- **避免的旧版本错误**：
-  - 纯白卡片只有描边、无阴影（v1 老版，显空洞）
-  - 深绿全屏背景、大色块（v2 备选版，党政标语感）
-  - 米色暖底（v3 备选版，与集团 VI 惯例有偏差）
-
-**v4 设计语言一句话总结**：在保留集团波浪条+经研院LOGO 的 VI 基础上，用**纯白+hairline+大字号+极细字重+微阴影**做精致现代风的视觉表达，参考调性接近 Stripe / Apple Newsroom / 麦肯锡现代报告。
+**v4 视觉语言一句话**：纯白底 + hairline 边框 + 微阴影 + 大字号极细字重 + 品牌色 ≤20% 点缀；不要深色块/重底色（党政标语感）。完整设计要点（色值、字重、章节扉页、避免的旧版错误）见 **[references/visual-evolution.md](references/visual-evolution.md) · v4 视觉系统核心要点**——装配时若拿不准某个视觉细节，去那里查，不要在此重述。
 
 ---
 
@@ -299,7 +283,7 @@ for idx in [0, len(doc)//4, len(doc)//2, 3*len(doc)//4, len(doc)-1]:
 
 ## 视觉系统速查
 
-**配色**（来自 SPIC ETRC LOGO 双螺旋 + 集团参考PPT惯例）：
+**配色**（来自 SPIC ETRC LOGO 双螺旋 + 集团参考PPT惯例；**真相源是 `template/theme.css` 的 CSS 变量**，下表仅为装配速查，若与 theme.css 不一致以 theme.css 为准）：
 - 品牌深蓝 `#00005A` — 封面主标题
 - 品牌红 `#D20000` — 章节大数字
 - 品牌绿 `#3C961E` — 虚线框/边框

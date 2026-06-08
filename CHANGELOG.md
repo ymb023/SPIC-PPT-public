@@ -4,6 +4,17 @@
 
 ---
 
+## [4.8.2] — 2026-06-05 · SKILL.md 瘦身：reference 内容下沉（context engineering）
+
+依据 Anthropic《Lessons from building Claude Code: How we use skills》#02——SKILL.md 应是导航页，详细说明下沉到 references/，渐进暴露。
+
+### Changed
+- **删 SKILL.md 重复段**：「v4 视觉系统核心要点」整段（色值/字重/旧版错误，约 16 行）与 `references/visual-evolution.md` 一字不差重复，删除并替换为一句视觉语言概括 + 指针。零信息损失，装配时拿不准的视觉细节去 reference 查。
+- **色值表标注真相源**：SKILL.md 配色速查表注明「真相源是 `template/theme.css` 的 CSS 变量」，降低多处文档色值漂移风险（不加检查脚本——色值不像版本号频繁变，theme.css 是事实源，避免过度工程化）。
+
+### Notes
+- 保留判断：色值/字体/LOGO 路径/飘带文件名是装配高频锚点（每页要查），留在导航页符合 #02，不下沉。区分标准是查阅频率：每页用 → 留；历史考据 → 下沉。
+
 ## [4.8.1] — 2026-06-05 · 修复 README 版本漏更 + 版本一致性焊进 health_check
 
 用户发现：GitHub 主页 README"当前版本"行一直停在 v4.6.1——升版本时反复漏改 README 这一处（4.7.0、4.8.0 两次都漏）。根因是"六处同步"靠记得，又掉进本 skill 一路在批判的"靠 AI 记得"坑。
