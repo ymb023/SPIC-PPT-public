@@ -10,3 +10,9 @@ output/
 .vscode/
 .idea/
 _versions/
+
+*.ai
+*.jpg
+*.jpeg
+*.pdf
+docs/
