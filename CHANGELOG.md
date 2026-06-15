@@ -4,6 +4,19 @@
 
 ---
 
+## [4.8.3] — 2026-06-15 · check_overflow 相对路径修复（苏州经验反哺·唯一进 skill 的一条）
+
+苏州发改委讲坛积累了一份《通用工作手册》（266 行）+ 44 页成品。用两个 workflow 逐条比对手册 vs skill（36 条候选反哺），但工程上严格过滤——**只有 AI 真不知道、真踩坑、且属"装配层"的才进 skill，其余留手册**。最终只一条够格，且它是代码 bug 不是规则。
+
+### Fixed
+- **`check_overflow.py` 入口 `html_path.resolve()`**：相对路径 + 中文目录下，Chrome headless 解析 `file:///` URL 失败，导致闸门误报"找不到文件/溢出"（主目录 `D:/工作文件夹/...` 是中文路径，命中率极高）。脚本入口转绝对路径自行消化——**用 1 行代码消灭这个坑，而非在 SKILL.md 写"请记得用绝对路径"**（能用代码消灭的 gotcha 不留成规则）。
+- 回归：相对/绝对路径均 exit 0；health_check 14/14；build_pdf import 正常。
+
+### 反哺取舍（记录工程判断，避免 skill 越堆越臭长）
+- **砍掉不进 skill**：屏=判断/口语回逐字稿、政治话语暗线、机构介绍从大到小、复用成熟金句、合规红线（绝对化/攀附/数字三要素）——这些是**讲者/内容层**经验，留《通用工作手册》，不污染装配层 skill。
+- **防 subagent 注入**：评估后砍——skill 的 WebFetch 只抓政府官网（news.cn/gov.cn）核对引文，注入面极低，手册那条源自爬商业网页场景，不适用。
+- **砍三明治/版式扩容**：留待后续版本，靠新增横向构图版式（quad-grid/flow-row 等）从结构上化解"刻板三明治"，而非加规则劝阻——规则劝不动结构，组件才能换结构。需渲样张确认观感后再焊。
+
 ## [4.8.2] — 2026-06-05 · SKILL.md 瘦身：reference 内容下沉（context engineering）
 
 依据 Anthropic《Lessons from building Claude Code: How we use skills》#02——SKILL.md 应是导航页，详细说明下沉到 references/，渐进暴露。

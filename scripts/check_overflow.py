@@ -114,6 +114,10 @@ def check_html(
     """检测 HTML 中每张 slide 是否溢出。返回 exit code。"""
     chrome = find_chrome()
 
+    # 转绝对路径——否则中文相对路径下 Chrome headless 解析 file:/// URL 失败，
+    # 闸门误报"找不到文件/溢出"（主目录 D:/工作文件夹/... 是中文路径，命中率极高）。
+    html_path = html_path.resolve()
+
     # 读源 HTML，临时插入 check 脚本到 </body> 前
     src = html_path.read_text(encoding="utf-8")
     if "</body>" not in src:
