@@ -134,7 +134,7 @@ SPIC-PPT/
 
 ## 版本
 
-当前版本：**v4.8.3**（详见 [CHANGELOG.md](CHANGELOG.md)）
+当前版本：**v4.9.0**（详见 [CHANGELOG.md](CHANGELOG.md)）
 
 早期迭代（v1→v4）主要经历：
 - 重新定位为"视觉装配"工作流（非"内容生成"）

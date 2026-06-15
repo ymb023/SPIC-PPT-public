@@ -1,6 +1,6 @@
 ---
 name: spic-ppt
-version: 4.8.3
+version: 4.9.0
 description: >-
   Use when the user has an existing research report, outline, or written
   manuscript and wants to convert it into a polished HTML+PDF presentation deck
@@ -236,13 +236,16 @@ for idx in [0, len(doc)//4, len(doc)//2, 3*len(doc)//4, len(doc)-1]:
 
 ```
 项目目录/
-├── 成品PPT.html
-├── 成品PPT.pdf
+├── 成品PPT.html              # 编辑用（依赖 css/图片）
+├── 成品PPT.pdf               # 交付物①：打印/正式存档
+├── 成品PPT.standalone.html   # 交付物②：自包含单文件（自动产出，见下）
 ├── 结构抽取_V2.md
 ├── _extracted/                # 权威原文汇编（如有）
 ├── _preview/                  # 抽样PNG（验证用）
 └── _versions/                 # 历史版本快照（自动留底，见下）
 ```
+
+**单文件交付（自动）**：`build_pdf.py` 导出 PDF 后会顺带产出 `成品PPT.standalone.html`——CSS 与图片全部内联（base64），**一个文件、双击即开、可邮件直发**，VI 与原版完全一致。发给别人/在线看用这一份；继续编辑仍用原 `成品PPT.html`（带依赖）。不需要时加 `--no-standalone` 跳过。注：单文件含 base64 图片，体积比原 HTML 大（标准模板约几 MB），属正常。
 
 **版本留底（自动，无需操心）**：每次用 `build_pdf.py` 导出前，会自动把上一版 `成品PPT.html` 和 `成品PPT.pdf` 复制进 `_versions/`，命名带秒级时间戳（如 `成品PPT_20260605-143012.html`）。
 

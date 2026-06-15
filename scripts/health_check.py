@@ -208,7 +208,11 @@ def iter_html_files(skill_dir: Path):
         # 原地过滤要跳过的目录
         dirs[:] = [d for d in dirs if d not in SKIP_DIRS]
         for fn in files:
-            if fn.lower().endswith(".html"):
+            low = fn.lower()
+            # 跳过自包含单文件交付物（base64 内联，非源 HTML，不当成品扫）
+            if low.endswith(".standalone.html"):
+                continue
+            if low.endswith(".html"):
                 yield Path(root) / fn
 
 

@@ -57,6 +57,7 @@ except Exception:
 SUPPORTS_COLOR = sys.stdout.isatty()
 RED = "\033[31m" if SUPPORTS_COLOR else ""
 GREEN = "\033[32m" if SUPPORTS_COLOR else ""
+YELLOW = "\033[33m" if SUPPORTS_COLOR else ""
 BOLD = "\033[1m" if SUPPORTS_COLOR else ""
 RESET = "\033[0m" if SUPPORTS_COLOR else ""
 
@@ -118,6 +119,8 @@ def main() -> None:
                     help="输出 PDF 路径（默认同名 .pdf）")
     ap.add_argument("--tolerance", type=int, default=2,
                     help="溢出容差 px（默认 2）")
+    ap.add_argument("--no-standalone", action="store_true",
+                    help="不顺带生成自包含单文件 HTML（默认生成）")
     ap.add_argument("--force", action="store_true",
                     help="跳过溢出闸门强行导出（你已看过提示并决定带溢出交付）")
     args = ap.parse_args()
@@ -158,6 +161,18 @@ def main() -> None:
     if code == 0:
         print(f"{GREEN}{BOLD}✓ 已导出：{RESET}{pdf_path}")
         print(f"  找回旧版：打开 {args.html.parent / VERSIONS_DIR}/ 里带时间戳的文件")
+
+        # ---- 顺带产出自包含单文件 HTML（CSS/图片内联，可邮件直发/双击即开）----
+        if not args.no_standalone:
+            try:
+                from inline_html import inline_html  # 同目录
+                sa = inline_html(args.html)
+                sa_kb = round(sa.stat().st_size / 1024)
+                print(f"{GREEN}✓ 单文件已产出：{RESET}{sa} ({sa_kb} KB)")
+                print("  这一份自包含，发给别人/在线看用它；继续编辑用原 HTML")
+            except Exception as e:  # 单文件失败不影响 PDF 主交付
+                print(f"{YELLOW}[warn]{RESET} 单文件 HTML 生成失败（不影响 PDF）：{e}",
+                      file=sys.stderr)
     sys.exit(code)
 
 

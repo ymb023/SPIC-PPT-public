@@ -4,6 +4,24 @@
 
 ---
 
+## [4.9.0] — 2026-06-15 · 单文件 HTML 交付（导出顺带产自包含 standalone）
+
+用户痛点：导出的 HTML 依赖一堆外部文件（css/波浪条/logo/抽取图），脱离工作目录就是裸页，没法单独分享。交付一份 PPT，对方该收到一个文件不是一个文件夹。
+
+### Added
+- **`scripts/inline_html.py`**：把 HTML 的外部 CSS（→`<style>`）和本地图片（→base64 data URI）全部内联，产出自包含单文件 `<stem>.standalone.html`，双击即开、可邮件直发、VI 与原版一致。CSS 内 `url()` 一并内联；远程/已 data 引用幂等跳过；缺失图警告不崩。
+- **接入 build_pdf 导出闸门**：导出 PDF 成功后顺带产出 standalone（`--no-standalone` 可跳过）；单文件失败不影响 PDF 主交付。一次导出得两种交付格式——PDF 打印存档、单文件分享在线看。
+- **字体**：不嵌入，靠 font-family 回退链（交付环境基本 Windows，雅黑必装）。
+
+### Changed
+- `SKILL.md` 第八阶段归档目录加 `成品PPT.standalone.html` + 单文件交付说明。
+- `health_check.py`：`iter_html_files` 跳过 `*.standalone.html`（交付物非源，不当成品扫）。
+
+### Engineering Notes
+- TDD：RED（inline_html 不存在）→ 实现 → GREEN（5/5：CSS内联/图base64/幂等/缺图不崩/重复图各自内联）。
+- **眼见为实抓出真 bug**：曾试 `content:url()` 去重重复图（578KB 飘带×7次→省体积），测试 9/9 全过，但渲染验证发现 logo 被巨幅拉伸破版——`content:url()` 绕过 `<img>` 的 CSS 尺寸约束。**否决去重，保 `<img>` 语义零副作用**。这正是 skill 自身"渲染验证"铁律的价值：纯单测会放过这种 bug。
+- 体积：不去重不换图，标准模板单文件约 6MB（高清飘带 base64×多次）；能邮件发（未超 25MB），用户选择不优化、保高清。
+
 ## [4.8.3] — 2026-06-15 · check_overflow 相对路径修复（苏州经验反哺·唯一进 skill 的一条）
 
 苏州发改委讲坛积累了一份《通用工作手册》（266 行）+ 44 页成品。用两个 workflow 逐条比对手册 vs skill（36 条候选反哺），但工程上严格过滤——**只有 AI 真不知道、真踩坑、且属"装配层"的才进 skill，其余留手册**。最终只一条够格，且它是代码 bug 不是规则。
