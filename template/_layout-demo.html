@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>新版式 demo · 7 种破三明治构图</title>
+<link rel="stylesheet" href="theme.css">
+<link rel="stylesheet" href="components.css">
+<style>
+  .slide-body { padding: 40px 64px 54px 64px; height: 100%; position: relative; z-index: 2; display: flex; flex-direction: column; }
+  /* ---- 标题区三件套（眉标+大标题+导语+满宽飘带）---- */
+  .head-block { margin-bottom: 2pt; }
+  .head-eyebrow { font-size: 13pt; letter-spacing: 0.18em; color: var(--brand-red); font-weight: var(--fw-bold); margin-bottom: 10pt; }
+  .head-title { font-size: 28pt; font-weight: var(--fw-bold); color: var(--ink-strong); line-height: 1.24; margin: 0; }
+  .head-lead { font-size: 15.5pt; color: var(--ink-med); line-height: 1.58; margin: 12pt 0 0 0; max-width: 95%; }
+  .head-lead .hl { color: var(--emphasis-red); font-weight: var(--fw-bold); }
+  .page-wave { margin: 16pt 0 2pt 0; }
+  .page-no { position: absolute; bottom: 28px; right: 56px; font-family: var(--font-en); font-size: 12pt; color: var(--ink-faint); letter-spacing: 0.05em; z-index: 5; }
+
+  /* ① 四宫格 */
+  .quad-grid { display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; gap: 18pt; flex: 1; min-height: 0; margin-top: 20pt; }
+  .quad-card { border: 1px solid var(--hairline); border-radius: 10px; box-shadow: var(--shadow-card); padding: 20pt 26pt; display: flex; flex-direction: column; justify-content: center; position: relative; overflow: hidden; }
+  .quad-card::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 4px; }
+  .quad-card:nth-child(1)::before { background: var(--brand-orange); }
+  .quad-card:nth-child(2)::before { background: var(--brand-red); }
+  .quad-card:nth-child(3)::before { background: var(--brand-green); }
+  .quad-card:nth-child(4)::before { background: var(--brand-navy-light); }
+  .quad-num { font-family: var(--font-en); font-size: 26pt; font-weight: var(--fw-light); line-height: 1; margin-bottom: 9pt; }
+  .quad-card:nth-child(1) .quad-num { color: var(--brand-orange); }
+  .quad-card:nth-child(2) .quad-num { color: var(--brand-red); }
+  .quad-card:nth-child(3) .quad-num { color: var(--brand-green); }
+  .quad-card:nth-child(4) .quad-num { color: var(--brand-navy-light); }
+  .quad-title { font-size: 18pt; font-weight: var(--fw-bold); color: var(--ink-strong); margin-bottom: 6pt; }
+  .quad-desc { font-size: 14pt; color: var(--ink-med); line-height: 1.55; }
+
+  /* ② 横向流程节点带 */
+  .flow-row { display: flex; align-items: stretch; gap: 0; flex: 1; min-height: 0; margin-top: 22pt; }
+  .flow-node { flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 18pt 12pt; position: relative; }
+  .flow-node .fn-num { font-family: var(--font-en); font-size: 30pt; font-weight: var(--fw-light); line-height: 1; margin-bottom: 12pt; }
+  .flow-node .fn-title { font-size: 16.5pt; font-weight: var(--fw-bold); color: var(--ink-strong); margin-bottom: 8pt; }
+  .flow-node .fn-desc { font-size: 13pt; color: var(--ink-med); line-height: 1.5; }
+  .flow-node:not(:last-child)::after { content: "\203A"; position: absolute; right: -7px; top: 50%; transform: translateY(-50%); font-size: 26pt; color: var(--ink-faint); z-index: 2; }
+  .flow-node:nth-child(1) .fn-num { color: var(--brand-orange); }
+  .flow-node:nth-child(2) .fn-num { color: var(--brand-red); }
+  .flow-node:nth-child(3) .fn-num { color: var(--brand-green); }
+  .flow-node:nth-child(4) .fn-num { color: var(--brand-navy-light); }
+  .flow-node:nth-child(5) .fn-num { color: var(--brand-orange); }
+
+  /* ③ 验证对比 + 纯CSS横条形图 */
+  .verify-row { display: flex; align-items: stretch; gap: 0; flex: 1; min-height: 0; margin-top: 16pt; }
+  .verify-ai { flex: 0 0 27%; display: flex; flex-direction: column; justify-content: center; padding: 20pt 22pt; background: var(--bg-soft); border: 1px solid var(--hairline); border-radius: 10px; }
+  .verify-ai .tag { font-size: 12pt; letter-spacing: 0.2em; color: var(--ink-soft); font-weight: var(--fw-bold); margin-bottom: 13pt; }
+  .verify-ai .big { font-family: var(--font-en); font-size: 33pt; font-weight: var(--fw-bold); color: var(--ink-soft); line-height: 1; text-decoration: line-through; text-decoration-color: var(--brand-red); text-decoration-thickness: 2px; }
+  .verify-ai .sub { font-size: 14pt; color: var(--ink-soft); margin-top: 10pt; }
+  .verify-arrow { flex: 0 0 13%; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--ink-faint); }
+  .verify-arrow .ar { font-size: 26pt; line-height: 1; }
+  .verify-arrow .lbl { font-size: 12pt; color: var(--ink-soft); margin-top: 8pt; letter-spacing: 0.1em; }
+  .verify-real { flex: 1; display: flex; flex-direction: column; justify-content: center; padding: 18pt 26pt; border: 1px solid var(--red-15); border-radius: 10px; box-shadow: var(--shadow-card); }
+  .verify-real .tag { font-size: 12.5pt; letter-spacing: 0.12em; color: var(--brand-navy); font-weight: var(--fw-bold); margin-bottom: 13pt; }
+  .mh-rows { display: flex; flex-direction: column; gap: 12pt; }
+  .mh-row { display: flex; align-items: center; gap: 14pt; }
+  .mh-yr { width: 52px; font-family: var(--font-en); font-size: 14pt; color: var(--ink-med); font-weight: var(--fw-medium); }
+  .mh-track { flex: 1; height: 21px; background: var(--bg-soft); border: 1px solid var(--hairline); border-radius: 5px; position: relative; }
+  .mh-fill { height: 100%; border-radius: 4px; }
+  .mh-row:nth-child(1) .mh-fill { background: var(--brand-navy-light); }
+  .mh-row:nth-child(2) .mh-fill { background: var(--brand-orange); }
+  .mh-row:nth-child(3) .mh-fill { background: var(--brand-red); }
+  .mh-pct { width: 78px; text-align: right; font-family: var(--font-en); font-size: 17pt; font-weight: var(--fw-bold); }
+  .mh-row:nth-child(1) .mh-pct { color: var(--brand-navy-light); }
+  .mh-row:nth-child(2) .mh-pct { color: var(--brand-orange); }
+  .mh-row:nth-child(3) .mh-pct { color: var(--brand-red); }
+  .verify-anchor { margin-top: 16pt; padding: 13pt 24pt; border-left: 4px solid var(--brand-red); background: var(--red-04); font-size: 16pt; color: var(--ink-strong); line-height: 1.55; }
+  .verify-anchor b { color: var(--emphasis-red); }
+
+  /* ④ 红黄绿三栏 */
+  .traffic { display: flex; gap: 18pt; flex: 1; min-height: 0; margin-top: 20pt; }
+  .tf { flex: 1; border: 1px solid var(--hairline); border-radius: 10px; box-shadow: var(--shadow-card); padding: 22pt 22pt; display: flex; flex-direction: column; justify-content: center; }
+  .tf .tf-head { display: flex; align-items: center; gap: 10pt; margin-bottom: 14pt; padding-bottom: 12pt; border-bottom: 1px solid var(--hairline); }
+  .tf .tf-dot { width: 16px; height: 16px; border-radius: 50%; flex: 0 0 auto; }
+  .tf .tf-name { font-size: 17pt; font-weight: var(--fw-bold); }
+  .tf.red .tf-dot { background: var(--brand-red); } .tf.red .tf-name { color: var(--brand-red); }
+  .tf.amber .tf-dot { background: var(--brand-orange); } .tf.amber .tf-name { color: var(--brand-orange); }
+  .tf.green .tf-dot { background: var(--brand-green); } .tf.green .tf-name { color: var(--brand-green); }
+  .tf p { font-size: 13.5pt; color: var(--ink-med); line-height: 1.6; margin: 0 0 9pt 0; }
+  .tf p b { color: var(--ink-strong); }
+
+  /* ⑤ 组织架构 */
+  .org-head { text-align: center; margin: 16pt 0 0 0; }
+  .org-head .on { font-size: 18pt; font-weight: var(--fw-bold); color: var(--brand-navy); }
+  .org-head .os { font-size: 12.5pt; color: var(--ink-soft); margin-top: 4pt; letter-spacing: 0.04em; }
+  .dept-row { display: flex; gap: 13pt; margin-top: 16pt; flex: 1; min-height: 0; align-items: stretch; }
+  .dept { flex: 1; border: 1px solid var(--hairline); border-radius: 9px; box-shadow: var(--shadow-soft); padding: 18pt 10pt; text-align: center; display: flex; flex-direction: column; justify-content: center; }
+  .dept.me { border: 2px solid var(--brand-red); background: var(--red-04); }
+  .dept .dn { font-size: 14.5pt; font-weight: var(--fw-bold); color: var(--ink-strong); }
+  .dept.me .dn { color: var(--brand-red); }
+  .dept .dd { font-size: 12pt; color: var(--ink-med); margin-top: 7pt; line-height: 1.5; }
+
+  /* ⑥ logo 墙 */
+  .logo-wall { margin-top: 22pt; padding-top: 18pt; border-top: 1px dashed var(--hairline); }
+  .lw-label { font-size: 13pt; color: var(--ink-soft); letter-spacing: 0.12em; margin-bottom: 18pt; font-weight: var(--fw-medium); }
+  .lw-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 26pt 20pt; align-items: center; }
+  .lw-cell { height: 56px; display: flex; align-items: center; justify-content: center; border: 1px solid var(--hairline); border-radius: 8px; background: var(--bg-soft); font-size: 15pt; font-weight: var(--fw-bold); color: var(--ink-med); letter-spacing: 0.05em; }
+
+  /* ⑦ 产品截图框（cover 铺满，区别于 chart-frame 的 contain）*/
+  .shot-frame { border: 1px solid var(--hairline); border-radius: 10px; box-shadow: var(--shadow-card); overflow: hidden; background: var(--bg-pure); display: flex; flex-direction: column; flex: 1; min-height: 0; margin-top: 18pt; }
+  .shot-frame .bar { height: 26px; background: var(--bg-soft); border-bottom: 1px solid var(--hairline); display: flex; align-items: center; padding-left: 12px; gap: 6px; flex: 0 0 auto; }
+  .shot-frame .bar i { width: 9px; height: 9px; border-radius: 50%; display: inline-block; }
+  .shot-frame .bar i:nth-child(1){background:#ff5f56;} .shot-frame .bar i:nth-child(2){background:#ffbd2e;} .shot-frame .bar i:nth-child(3){background:#27c93f;}
+  .shot-frame .shot-body { flex: 1; min-height: 0; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, var(--navy-04), var(--bg-soft)); color: var(--ink-soft); font-size: 14pt; }
+</style>
+</head>
+<body>
+
+<!-- ① 四宫格 -->
+<section class="slide">
+  <div class="logo-corner"><img src="../shared/logos/etrc/etrc-logo.png" alt=""></div>
+  <div class="slide-body">
+    <div class="head-block">
+      <div class="head-eyebrow">版 式 一 · 四 宫 格</div>
+      <h2 class="head-title">新能源消纳的四类结构性约束</h2>
+      <p class="head-lead">四个并列要点用 2×2 等高卡墙，替代纵向列表流水账，<span class="hl">视觉更稳、更像正式汇报</span>。</p>
+    </div>
+    <div class="page-wave"><img src="_assets/wave-inner.png" alt=""></div>
+    <div class="quad-grid">
+      <div class="quad-card"><div class="quad-num">01</div><div class="quad-title">电网送出受限</div><div class="quad-desc">局部断面阻塞，弃风弃光集中在送出能力不足的区域。</div></div>
+      <div class="quad-card"><div class="quad-num">02</div><div class="quad-title">调峰能力不足</div><div class="quad-desc">灵活性资源缺口大，午间光伏大发时段下调空间有限。</div></div>
+      <div class="quad-card"><div class="quad-num">03</div><div class="quad-title">市场机制待完善</div><div class="quad-desc">现货价格信号未充分传导，跨省区交易壁垒仍存。</div></div>
+      <div class="quad-card"><div class="quad-num">04</div><div class="quad-title">储能配置错配</div><div class="quad-desc">强配储能利用率低，与系统实际调节需求不匹配。</div></div>
+    </div>
+  </div>
+  <div class="page-no">01</div>
+</section>
+
+<!-- ② 横向流程 -->
+<section class="slide">
+  <div class="logo-corner"><img src="../shared/logos/etrc/etrc-logo.png" alt=""></div>
+  <div class="slide-body">
+    <div class="head-block">
+      <div class="head-eyebrow">版 式 二 · 横 向 流 程</div>
+      <h2 class="head-title">AI 辅助研究的五节点工作流</h2>
+      <p class="head-lead">流程/步骤用横向等宽节点流，节点间自动生成箭头，<span class="hl">强烈传达线性先后顺序</span>。</p>
+    </div>
+    <div class="page-wave"><img src="_assets/wave-inner.png" alt=""></div>
+    <div class="flow-row">
+      <div class="flow-node"><div class="fn-num">01</div><div class="fn-title">需求拆解</div><div class="fn-desc">把命题拆成可验证的子问题</div></div>
+      <div class="flow-node"><div class="fn-num">02</div><div class="fn-title">证据采集</div><div class="fn-desc">多源抓取 + 权威原文核对</div></div>
+      <div class="flow-node"><div class="fn-num">03</div><div class="fn-title">交叉验证</div><div class="fn-desc">独立 agent 对抗式复核</div></div>
+      <div class="flow-node"><div class="fn-num">04</div><div class="fn-title">判断收敛</div><div class="fn-desc">形成分层结论与建议</div></div>
+      <div class="flow-node"><div class="fn-num">05</div><div class="fn-title">成稿装配</div><div class="fn-desc">证据驱动的报告输出</div></div>
+    </div>
+  </div>
+  <div class="page-no">02</div>
+</section>
+
+<!-- ③ 验证对比+条形图 -->
+<section class="slide">
+  <div class="logo-corner"><img src="../shared/logos/etrc/etrc-logo.png" alt=""></div>
+  <div class="slide-body">
+    <div class="head-block">
+      <div class="head-eyebrow">版 式 三 · 验 证 对 比</div>
+      <h2 class="head-title">AI 初判 vs 回到原文的真实数据</h2>
+      <p class="head-lead">把"能数据化的糊截图"重画成纯 CSS 条形图，<span class="hl">断崖式下跌的可视化 &gt;&gt; 糊截图</span>。</p>
+    </div>
+    <div class="page-wave"><img src="_assets/wave-inner.png" alt=""></div>
+    <div class="verify-row">
+      <div class="verify-ai">
+        <div class="tag">AI 初 判</div>
+        <div class="big">76%</div>
+        <div class="sub">"毛利率稳定高位"</div>
+      </div>
+      <div class="verify-arrow"><div class="ar">&rsaquo;</div><div class="lbl">回到原文</div></div>
+      <div class="verify-real">
+        <div class="tag">招股书逐年真实毛利率</div>
+        <div class="mh-rows">
+          <div class="mh-row"><div class="mh-yr">2022</div><div class="mh-track"><div class="mh-fill" style="width:76%"></div></div><div class="mh-pct">76.1%</div></div>
+          <div class="mh-row"><div class="mh-yr">2023</div><div class="mh-track"><div class="mh-fill" style="width:41%"></div></div><div class="mh-pct">41.0%</div></div>
+          <div class="mh-row"><div class="mh-yr">2024</div><div class="mh-track"><div class="mh-fill" style="width:2%"></div></div><div class="mh-pct">-0.4%</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="verify-anchor">三年从 76.1% 到 <b>-0.4%</b>——精确数字必须回到来源逐条复核。</div>
+  </div>
+  <div class="page-no">03</div>
+</section>
+
+<!-- ④ 红黄绿三栏 -->
+<section class="slide">
+  <div class="logo-corner"><img src="../shared/logos/etrc/etrc-logo.png" alt=""></div>
+  <div class="slide-body">
+    <div class="head-block">
+      <div class="head-eyebrow">版 式 四 · 红 黄 绿 分 级</div>
+      <h2 class="head-title">AI 应用的三档安全边界</h2>
+      <p class="head-lead">用交通灯隐喻表达分级，<span class="hl">一眼传达禁区 / 谨慎 / 放开</span>。</p>
+    </div>
+    <div class="page-wave"><img src="_assets/wave-inner.png" alt=""></div>
+    <div class="traffic">
+      <div class="tf red"><div class="tf-head"><span class="tf-dot"></span><span class="tf-name">红线禁区</span></div><p><b>不上屏</b>：未核实的人事、分值、内部口径。</p><p>对外材料一律不碰受众强项与越位建议。</p></div>
+      <div class="tf amber"><div class="tf-head"><span class="tf-dot"></span><span class="tf-name">谨慎使用</span></div><p><b>需复核</b>：精确数字、党政引文、服务关系表述。</p><p>逐条核对来源后方可定稿。</p></div>
+      <div class="tf green"><div class="tf-head"><span class="tf-dot"></span><span class="tf-name">放心放开</span></div><p><b>可自主</b>：版式装配、可视化重画、结构收敛。</p><p>这些是 AI 的强项，充分授权。</p></div>
+    </div>
+  </div>
+  <div class="page-no">04</div>
+</section>
+
+<!-- ⑤ 组织架构 -->
+<section class="slide">
+  <div class="logo-corner"><img src="../shared/logos/etrc/etrc-logo.png" alt=""></div>
+  <div class="slide-body">
+    <div class="head-block">
+      <div class="head-eyebrow">版 式 五 · 组 织 架 构</div>
+      <h2 class="head-title">机构定位：从大到小，定位到我</h2>
+      <p class="head-lead">一行等宽部门卡，<span class="hl">把"我负责的"高亮锁定</span>，比纵向堆叠清楚。</p>
+    </div>
+    <div class="page-wave"><img src="_assets/wave-inner.png" alt=""></div>
+    <div class="org-head"><div class="on">某能源研究院</div><div class="os">战略智库 · 五大业务板块</div></div>
+    <div class="dept-row">
+      <div class="dept"><div class="dn">综合管理部</div><div class="dd">统筹协调</div></div>
+      <div class="dept"><div class="dn">战略情报所</div><div class="dd">政策研究</div></div>
+      <div class="dept"><div class="dn">市场研究所</div><div class="dd">市场分析</div></div>
+      <div class="dept"><div class="dn">技术经济所</div><div class="dd">技经评价</div></div>
+      <div class="dept me"><div class="dn">AI 应用中心</div><div class="dd">← 本次汇报</div></div>
+    </div>
+  </div>
+  <div class="page-no">05</div>
+</section>
+
+<!-- ⑥ logo 墙 + ⑦ 截图框（同页展示两个轻组件）-->
+<section class="slide">
+  <div class="logo-corner"><img src="../shared/logos/etrc/etrc-logo.png" alt=""></div>
+  <div class="slide-body">
+    <div class="head-block">
+      <div class="head-eyebrow">版 式 六 / 七 · 截 图 框 + logo 墙</div>
+      <h2 class="head-title">产品界面与外部背书</h2>
+      <p class="head-lead">截图套浏览器窗口显得"真在用"（<span class="hl">cover 铺满，区别于图表的 contain</span>）；logo 墙比文字客户名单更有说服力。</p>
+    </div>
+    <div class="page-wave"><img src="_assets/wave-inner.png" alt=""></div>
+    <div class="shot-frame">
+      <div class="bar"><i></i><i></i><i></i></div>
+      <div class="shot-body">［ 产品界面截图区 · object-fit:cover 铺满去白边 ］</div>
+    </div>
+    <div class="logo-wall">
+      <div class="lw-label">已 服 务 的 外 部 机 构</div>
+      <div class="lw-grid">
+        <div class="lw-cell">某发改委</div>
+        <div class="lw-cell">某能源集团</div>
+        <div class="lw-cell">某气候中心</div>
+        <div class="lw-cell">某海洋院</div>
+      </div>
+    </div>
+  </div>
+  <div class="page-no">06</div>
+</section>
+
+</body>
+</html>

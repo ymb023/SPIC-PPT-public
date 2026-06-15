@@ -1,5 +1,5 @@
 /* ============================================
-   SPIC-PPT 标准模板 v4.6.1 · 通用组件
+   SPIC-PPT 标准模板 v4.10.0 · 通用组件
    纯白底 + hairline 边框 + 微阴影 + 大字号锚点
    含修饰类：.slide.compact (密集页) / .slide.center-y (稀疏页) / .body-center
    详见 references/visual-evolution.md
@@ -958,3 +958,115 @@
 /* 通用 body 段落（不属于具体组件的） */
 .slide.compact > .slide-body > p,
 .slide.compact .body-text { font-size: 13pt; line-height: 1.65; }
+
+/* ============================================================
+   v4.10 · 第二代版式（破三明治构图，来自苏州讲坛实践）
+   全部只用 :root 现有变量；均为新增类，不改既有组件。
+   head-block 标题区三件套是这批版式的共享标题骨架。
+   ============================================================ */
+
+/* ---- 标题区三件套：中文眉标 + 大标题 + 导语 + 满宽飘带 ---- */
+.head-block { margin-bottom: 2pt; }
+.head-eyebrow { font-size: 13pt; letter-spacing: 0.18em; color: var(--brand-red); font-weight: var(--fw-bold); margin-bottom: 10pt; }
+.head-title { font-size: 28pt; font-weight: var(--fw-bold); color: var(--ink-strong); line-height: 1.24; margin: 0; }
+.head-title.sm { font-size: 24pt; }
+.head-lead { font-size: 15.5pt; color: var(--ink-med); line-height: 1.58; margin: 12pt 0 0 0; max-width: 95%; }
+.head-lead .hl { color: var(--emphasis-red); font-weight: var(--fw-bold); }
+
+/* ---- ① 四宫格（2×2 等高卡，左色条 + 大号英文序号）---- */
+.quad-grid { display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; gap: 18pt; flex: 1; min-height: 0; margin-top: 20pt; }
+.quad-card { border: 1px solid var(--hairline); border-radius: 10px; box-shadow: var(--shadow-card); padding: 20pt 26pt; display: flex; flex-direction: column; justify-content: center; position: relative; overflow: hidden; }
+.quad-card > * { min-width: 0; }
+.quad-card::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 4px; }
+.quad-card:nth-child(1)::before { background: var(--brand-orange); }
+.quad-card:nth-child(2)::before { background: var(--brand-red); }
+.quad-card:nth-child(3)::before { background: var(--brand-green); }
+.quad-card:nth-child(4)::before { background: var(--brand-navy-light); }
+.quad-num { font-family: var(--font-en); font-size: 26pt; font-weight: var(--fw-light); line-height: 1; margin-bottom: 9pt; }
+.quad-card:nth-child(1) .quad-num { color: var(--brand-orange); }
+.quad-card:nth-child(2) .quad-num { color: var(--brand-red); }
+.quad-card:nth-child(3) .quad-num { color: var(--brand-green); }
+.quad-card:nth-child(4) .quad-num { color: var(--brand-navy-light); }
+.quad-title { font-size: 18pt; font-weight: var(--fw-bold); color: var(--ink-strong); margin-bottom: 6pt; }
+.quad-desc { font-size: 14pt; color: var(--ink-med); line-height: 1.55; }
+
+/* ---- ② 横向流程节点带（N 节点等宽，伪元素 › 自动连接）---- */
+.flow-row { display: flex; align-items: stretch; gap: 0; flex: 1; min-height: 0; margin-top: 22pt; }
+.flow-node { flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 18pt 12pt; position: relative; }
+.flow-node .fn-num { font-family: var(--font-en); font-size: 30pt; font-weight: var(--fw-light); line-height: 1; margin-bottom: 12pt; color: var(--brand-navy-light); }
+.flow-node .fn-title { font-size: 16.5pt; font-weight: var(--fw-bold); color: var(--ink-strong); margin-bottom: 8pt; }
+.flow-node .fn-desc { font-size: 13pt; color: var(--ink-med); line-height: 1.5; }
+.flow-node:not(:last-child)::after { content: "\203A"; position: absolute; right: -7px; top: 50%; transform: translateY(-50%); font-size: 26pt; color: var(--ink-faint); z-index: 2; }
+.flow-node:nth-child(1) .fn-num { color: var(--brand-orange); }
+.flow-node:nth-child(2) .fn-num { color: var(--brand-red); }
+.flow-node:nth-child(3) .fn-num { color: var(--brand-green); }
+.flow-node:nth-child(5) .fn-num { color: var(--brand-orange); }
+
+/* ---- ③ 验证对比 + 纯 CSS 横条形图（AI初判删除线 → 真相）---- */
+.verify-row { display: flex; align-items: stretch; gap: 0; flex: 1; min-height: 0; margin-top: 16pt; }
+.verify-ai { flex: 0 0 27%; display: flex; flex-direction: column; justify-content: center; padding: 20pt 22pt; background: var(--bg-soft); border: 1px solid var(--hairline); border-radius: 10px; }
+.verify-ai .tag { font-size: 12pt; letter-spacing: 0.2em; color: var(--ink-soft); font-weight: var(--fw-bold); margin-bottom: 13pt; }
+.verify-ai .big { font-family: var(--font-en); font-size: 33pt; font-weight: var(--fw-bold); color: var(--ink-soft); line-height: 1; text-decoration: line-through; text-decoration-color: var(--brand-red); text-decoration-thickness: 2px; }
+.verify-ai .sub { font-size: 14pt; color: var(--ink-soft); margin-top: 10pt; }
+.verify-arrow { flex: 0 0 13%; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--ink-faint); }
+.verify-arrow .ar { font-size: 26pt; line-height: 1; }
+.verify-arrow .lbl { font-size: 12pt; color: var(--ink-soft); margin-top: 8pt; letter-spacing: 0.1em; }
+.verify-real { flex: 1; display: flex; flex-direction: column; justify-content: center; padding: 18pt 26pt; border: 1px solid var(--red-15); border-radius: 10px; box-shadow: var(--shadow-card); }
+.verify-real .tag { font-size: 12.5pt; letter-spacing: 0.12em; color: var(--brand-navy); font-weight: var(--fw-bold); margin-bottom: 13pt; }
+.mh-rows { display: flex; flex-direction: column; gap: 12pt; }
+.mh-row { display: flex; align-items: center; gap: 14pt; }
+.mh-yr { width: 52px; font-family: var(--font-en); font-size: 14pt; color: var(--ink-med); font-weight: var(--fw-medium); }
+.mh-track { flex: 1; height: 21px; background: var(--bg-soft); border: 1px solid var(--hairline); border-radius: 5px; position: relative; }
+.mh-fill { height: 100%; border-radius: 4px; }
+.mh-row:nth-child(1) .mh-fill { background: var(--brand-navy-light); }
+.mh-row:nth-child(2) .mh-fill { background: var(--brand-orange); }
+.mh-row:nth-child(3) .mh-fill { background: var(--brand-red); }
+.mh-pct { width: 78px; text-align: right; font-family: var(--font-en); font-size: 17pt; font-weight: var(--fw-bold); }
+.mh-row:nth-child(1) .mh-pct { color: var(--brand-navy-light); }
+.mh-row:nth-child(2) .mh-pct { color: var(--brand-orange); }
+.mh-row:nth-child(3) .mh-pct { color: var(--brand-red); }
+.verify-anchor { margin-top: 16pt; padding: 13pt 24pt; border-left: 4px solid var(--brand-red); background: var(--red-04); font-size: 16pt; color: var(--ink-strong); line-height: 1.55; }
+.verify-anchor b { color: var(--emphasis-red); }
+
+/* ---- ④ 红黄绿三栏（交通灯圆点 + 分级安全栏）---- */
+.traffic { display: flex; gap: 18pt; flex: 1; min-height: 0; margin-top: 20pt; }
+.tf { flex: 1; border: 1px solid var(--hairline); border-radius: 10px; box-shadow: var(--shadow-card); padding: 22pt 22pt; display: flex; flex-direction: column; justify-content: center; }
+.tf .tf-head { display: flex; align-items: center; gap: 10pt; margin-bottom: 14pt; padding-bottom: 12pt; border-bottom: 1px solid var(--hairline); }
+.tf .tf-dot { width: 16px; height: 16px; border-radius: 50%; flex: 0 0 auto; }
+.tf .tf-name { font-size: 17pt; font-weight: var(--fw-bold); }
+.tf.red .tf-dot { background: var(--brand-red); } .tf.red .tf-name { color: var(--brand-red); }
+.tf.amber .tf-dot { background: var(--brand-orange); } .tf.amber .tf-name { color: var(--brand-orange); }
+.tf.green .tf-dot { background: var(--brand-green); } .tf.green .tf-name { color: var(--brand-green); }
+.tf p { font-size: 13.5pt; color: var(--ink-med); line-height: 1.6; margin: 0 0 9pt 0; }
+.tf p b { color: var(--ink-strong); }
+
+/* ---- ⑤ 组织架构（中心标题 + 一行部门卡，.me 高亮自身）---- */
+.org-head { text-align: center; margin: 16pt 0 0 0; }
+.org-head .on { font-size: 18pt; font-weight: var(--fw-bold); color: var(--brand-navy); }
+.org-head .os { font-size: 12.5pt; color: var(--ink-soft); margin-top: 4pt; letter-spacing: 0.04em; }
+.dept-row { display: flex; gap: 13pt; margin-top: 16pt; flex: 1; min-height: 0; align-items: stretch; }
+.dept { flex: 1; border: 1px solid var(--hairline); border-radius: 9px; box-shadow: var(--shadow-soft); padding: 18pt 10pt; text-align: center; display: flex; flex-direction: column; justify-content: center; }
+.dept.me { border: 2px solid var(--brand-red); background: var(--red-04); }
+.dept .dn { font-size: 14.5pt; font-weight: var(--fw-bold); color: var(--ink-strong); }
+.dept.me .dn { color: var(--brand-red); }
+.dept .dd { font-size: 12pt; color: var(--ink-med); margin-top: 7pt; line-height: 1.5; }
+
+/* ---- ⑥ logo 墙（外部机构背书，等高等距）---- */
+.logo-wall { margin-top: 22pt; padding-top: 18pt; border-top: 1px dashed var(--hairline); }
+.lw-label { font-size: 13pt; color: var(--ink-soft); letter-spacing: 0.12em; margin-bottom: 18pt; font-weight: var(--fw-medium); }
+.lw-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 26pt 20pt; align-items: center; }
+.logo-wall img { width: 100%; height: auto; display: block; }
+/* 无图占位单元（真实 logo 替换后可不用）*/
+.lw-cell { height: 56px; display: flex; align-items: center; justify-content: center; border: 1px solid var(--hairline); border-radius: 8px; background: var(--bg-soft); font-size: 15pt; font-weight: var(--fw-bold); color: var(--ink-med); letter-spacing: 0.05em; }
+
+/* ---- ⑦ 产品截图框（cover 铺满，区别于 chart-frame 的 contain）----
+   数据图表用 .chart-frame（contain，不裁切）；真实产品界面截图用 .shot-frame
+   （cover，铺满去白边、作"真在用"证据）。两轨按图性质二选一。 */
+.shot-frame { border: 1px solid var(--hairline); border-radius: 10px; box-shadow: var(--shadow-card); overflow: hidden; background: var(--bg-pure); display: flex; flex-direction: column; flex: 1; min-height: 0; margin-top: 18pt; }
+.shot-frame .bar { height: 26px; background: var(--bg-soft); border-bottom: 1px solid var(--hairline); display: flex; align-items: center; padding-left: 12px; gap: 6px; flex: 0 0 auto; }
+.shot-frame .bar i { width: 9px; height: 9px; border-radius: 50%; display: inline-block; }
+.shot-frame .bar i:nth-child(1) { background: #ff5f56; }
+.shot-frame .bar i:nth-child(2) { background: #ffbd2e; }
+.shot-frame .bar i:nth-child(3) { background: #27c93f; }
+.shot-frame img { width: 100%; height: 100%; flex: 1; object-fit: cover; object-position: center top; display: block; min-height: 0; }
+.shot-cap { text-align: center; font-size: 12.5pt; color: var(--ink-med); margin-top: 9pt; font-weight: var(--fw-medium); }

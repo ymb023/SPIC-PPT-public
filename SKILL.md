@@ -1,6 +1,6 @@
 ---
 name: spic-ppt
-version: 4.9.0
+version: 4.10.0
 description: >-
   Use when the user has an existing research report, outline, or written
   manuscript and wants to convert it into a polished HTML+PDF presentation deck
@@ -267,9 +267,11 @@ for idx in [0, len(doc)//4, len(doc)//2, 3*len(doc)//4, len(doc)-1]:
 
 ---
 
-## 标准模板的 10 种版式
+## 标准模板的 17 种版式
 
-详见 `template/sample-pages.html`：
+详见 `template/sample-pages.html`（01-10 基础版式）+ `template/_layout-demo.html`（11-17 第二代破三明治版式）：
+
+**基础版式（01-10）**
 
 | 编号 | 版式 | 适用场景 |
 |---|---|---|
@@ -283,6 +285,20 @@ for idx in [0, len(doc)//4, len(doc)//2, 3*len(doc)//4, len(doc)-1]:
 | 08 | 时间线（带箭头） | 战略演进、规划路径 |
 | 09 | 双栏文字结论 | 研究结论+启示对照 |
 | 10 | 尾页（机构署名 + 飘带） | 标准收尾 |
+
+**第二代版式（11-17 · 破三明治横向构图，class 见 components.css v4.10 段）**
+
+| 编号 | 版式 | class | 适用场景 |
+|---|---|---|---|
+| 11 | 四宫格（2×2 等高卡，左色条+序号） | `.quad-grid`/`.quad-card` | 4 个并列要点，替代纵向列表 |
+| 12 | 横向流程节点带（›箭头自动连接） | `.flow-row`/`.flow-node` | 多步流程/工作流（无时间属性，区别于时间线 08） |
+| 13 | 验证对比+纯CSS条形图（删除线→真相） | `.verify-row`+`.mh-rows` | 前后对比、数据打假、趋势崩塌 |
+| 14 | 红黄绿三栏（交通灯分级） | `.traffic`/`.tf` | 安全/风险/底线三档分级 |
+| 15 | 组织架构（一行部门卡，.me 高亮自身） | `.dept-row`/`.dept` | 机构介绍从大到小、定位到我 |
+| 16 | 外部机构 logo 墙 | `.logo-wall`/`.lw-grid` | 权威客户背书（比文字名单有力） |
+| 17 | 产品截图框（浏览器chrome，cover铺满） | `.shot-frame` | 真实产品界面（区别于图表 chart-frame 的 contain） |
+
+**标题区三件套**（`.head-block`：眉标+大标题+导语带 `.hl` 红高亮）是 11-17 的共享标题骨架，连续叙事场景比标准 title-row 更克制。
 
 ## 视觉系统速查
 
