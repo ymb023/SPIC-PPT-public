@@ -1,6 +1,6 @@
 ---
 name: spic-ppt
-version: 4.10.0
+version: 4.11.0
 description: >-
   Use when the user has an existing research report, outline, or written
   manuscript and wants to convert it into a polished HTML+PDF presentation deck
@@ -220,6 +220,9 @@ python scripts/build_pdf.py "C:\absolute\path\成品PPT.html"
 4. 确需带溢出交付 → 加 `--force` 显式放行（你看过提示后自己拍板）
 
 > 单独跑自检（不导出）仍可用：`python scripts/check_overflow.py 成品PPT.html`
+> 单页几何护栏（字号<8pt / 元素出血）：`python scripts/check_geometry.py 成品PPT.html`
+
+> **维护者注**：改动 `theme.css` / `components.css` 后，跑 `python scripts/eval_suite.py` 做回归——它用三个固定输入（两样板覆盖 17 版式 + 魔鬼样本）自动确认"版式没退化、护栏仍灵敏"，把"改完靠人工渲染验收"变成"脚本判对错"。装配单份 PPT 时不需要跑它，这是维护 skill 本身时用的。
 
 **步骤 3 · 反向验证（导 PNG 抽样肉眼检）**：
 ```python

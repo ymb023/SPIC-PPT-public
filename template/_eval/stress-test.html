@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>魔鬼样本 · 护栏灵敏度反向夹具</title>
+<link rel="stylesheet" href="../theme.css">
+<link rel="stylesheet" href="../components.css">
+<style>
+  /* 这份样本是护栏的"反向夹具"——每页都故意制造一类违规，
+     用来验证 eval_suite 的护栏真能抓到，而非只验"正常页能过"。
+     期望：P1 报底部溢出 / P2 报字号<8pt / P3 报出血。 */
+  .slide-body { padding: 40px 64px; height: 100%; display: flex; flex-direction: column; }
+</style>
+</head>
+<body>
+
+<!-- P1：故意内容超载 → 应触发 check_overflow（底部溢出）-->
+<section class="slide">
+  <div class="slide-body">
+    <h2 class="page-title">压力页一 · 内容超载（应报底部溢出）</h2>
+    <!-- 固定 760px 高的块，加上标题与 padding 必然超过 720px 边界，
+         模拟一页塞太多内容而忘加 compact 的典型事故，确定触发 check_overflow。 -->
+    <div style="height:760px; flex:0 0 auto; background:var(--bg-soft); border:1px solid var(--hairline); padding:20px; font-size:16pt;">
+      这是一个刻意设为 760px 固定高度的内容块。叠加上方标题和 slide-body 的上下 padding，
+      内容底部必然超过 720px 物理边界，溢出闸门 check_overflow 必须报出底部溢出。
+      这模拟装配时单页内容超量、忘记加 .compact 或忘记拆页的真实事故。
+    </div>
+  </div>
+</section>
+
+<!-- P2：故意 6pt 微缩字 → 应触发 check_geometry（字号<8pt）-->
+<section class="slide">
+  <div class="slide-body">
+    <h2 class="page-title">压力页二 · 微缩字号（应报字号&lt;8pt）</h2>
+    <p style="font-size:6pt;">这是一段 6pt 的微缩文字，投屏绝对看不清——模拟有人为了塞下内容把字号缩到事故级别。几何护栏必须抓到这条 8pt 绝对红线以下的文字。</p>
+  </div>
+</section>
+
+<!-- P3：故意元素出血 → 应触发 check_geometry（右出血）-->
+<section class="slide">
+  <div class="slide-body">
+    <h2 class="page-title">压力页三 · 元素出血（应报右出血）</h2>
+    <div style="position:relative; left:1100px; width:400px; height:120px; background:var(--bg-soft); border:1px solid var(--hairline); font-size:16pt;">
+      这个块刻意定位到右侧 1100px + 宽 400px，右边缘到 1500px，远超 1280px 边界——模拟负 margin / 绝对定位 / 宽度溢出造成的横向出血。
+    </div>
+  </div>
+</section>
+
+</body>
+</html>

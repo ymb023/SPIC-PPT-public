@@ -292,6 +292,10 @@ def check_core_files(skill_dir: Path, rpt: Report) -> None:
         "template/_assets/wave-inner.png",
         "template/_assets/wave-cover-plain.png",
         "shared/logos/etrc/etrc-logo.png",
+        "template/_layout-demo.html",
+        "template/_eval/stress-test.html",
+        "scripts/check_geometry.py",
+        "scripts/eval_suite.py",
     ]
     for rel in core_files:
         target = skill_dir / rel
