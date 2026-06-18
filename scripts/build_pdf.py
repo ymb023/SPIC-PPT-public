@@ -149,6 +149,31 @@ def main() -> None:
     else:
         print(f"{RED}[!] --force：跳过溢出闸门{RESET}\n")
 
+    # ---- 几何护栏：字号<8pt / 元素出血（只警告，不阻断导出）----
+    # 溢出是零误报的硬红线 → 拒绝导出；几何护栏对某些合法装饰定位可能误报，
+    # 故只提示不拦，把判断权留给你（真事故你会看到，误报不会卡住交付）。
+    try:
+        from check_geometry import check_geometry  # 同目录
+        gdata = check_geometry(args.html, return_data=True)
+        gissues = []
+        for p in gdata["pages"]:
+            for f in p["fontTooSmall"]:
+                gissues.append(f"p{p['page']} 字号 {f['pt']}pt<8 ({f['el']})")
+            for b in p["bleed"]:
+                gissues.append(f"p{p['page']} 出血 {b['dir']} ({b['el']})")
+        if gissues:
+            print(f"{YELLOW}[geom warn]{RESET} 几何护栏发现 "
+                  f"{len(gissues)} 处（不阻断导出，请自行判断）：")
+            for it in gissues[:8]:
+                print(f"    · {it}")
+            if len(gissues) > 8:
+                print(f"    … 余 {len(gissues) - 8} 处，"
+                      f"详见 python scripts/check_geometry.py")
+            print()
+    except Exception as e:  # 护栏失败绝不影响主交付
+        print(f"{YELLOW}[warn]{RESET} 几何护栏跳过（不影响导出）：{e}",
+              file=sys.stderr)
+
     # ---- 覆盖前留底：把上一版 HTML+PDF 快照进 _versions/ ----
     n = snapshot_before_overwrite(args.html, pdf_path)
     if n:

@@ -44,7 +44,7 @@
 
 ## 视觉效果
 
-10 种标准版式覆盖 90% 的常见汇报场景：
+17 种版式：10 种基础版式（下表）+ 7 种第二代破三明治横向构图（四宫格/横向流程/验证对比条形图/红黄绿分级/组织架构/logo墙/产品截图框，见 `template/_layout-demo.html`）。基础 10 种覆盖 90% 常见汇报场景：
 
 | 编号 | 版式 | 适用 |
 |---|---|---|
@@ -59,7 +59,7 @@
 | 09 | 双栏文字结论 | 研究结论+启示 |
 | 10 | 尾页 | 标准收尾 |
 
-视觉预览：[templates/sample-preview.pdf](templates/sample-preview.pdf)
+视觉预览：[template/sample-preview.pdf](template/sample-preview.pdf)
 
 ---
 
@@ -81,15 +81,17 @@ SPIC-PPT/
 ├── README.md                      ← 本文件
 ├── task-input-checklist.md             ← 用户启动前的准备
 ├── workflow-sop.md                   ← 八阶段完整SOP
-├── templates/                     ← 标准模板
+├── template/                      ← 标准模板
 │   ├── README.md
 │   ├── theme.css                  ← 配色/字体变量
-│   ├── components.css             ← 通用组件
+│   ├── components.css             ← 通用组件（17 版式）
 │   ├── template.html              ← 空白骨架（复制用）
-│   ├── sample-pages.html          ← 10页示例
+│   ├── sample-pages.html          ← 10 基础版式示例
+│   ├── _layout-demo.html          ← 7 第二代版式示例
 │   ├── sample-preview.pdf
 │   ├── design-spec-summary.md
-│   └── _assets/                   ← 集团固定款波浪飘带
+│   ├── _assets/                   ← 集团固定款波浪飘带
+│   └── _eval/stress-test.html     ← 评测魔鬼样本
 └── shared/
     ├── vi-spec-notes.md
     └── logos/                     ← 官方LOGO库
@@ -134,7 +136,7 @@ SPIC-PPT/
 
 ## 版本
 
-当前版本：**v4.11.0**（详见 [CHANGELOG.md](CHANGELOG.md)）
+当前版本：**v4.11.1**（详见 [CHANGELOG.md](CHANGELOG.md)）
 
 早期迭代（v1→v4）主要经历：
 - 重新定位为"视觉装配"工作流（非"内容生成"）

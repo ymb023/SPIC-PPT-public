@@ -4,6 +4,21 @@
 
 ---
 
+## [4.11.1] — 2026-06-17 · 外部审计修正（Codex 审计 · 采纳真 bug、剔除平台错位）
+
+Codex 审计了一次，跑通 health_check(18/18) 和 eval_suite。其结论"能力内核强、改进空间在包装一致性"基本属实，但有**平台错位**：它拿 Codex 规范量这个 Claude Code skill（要求挪 version 字段、改平台中性口径、统一到 .codex/skills）——这些对 Codex 对、对我们不对，**未采纳**（我们运行时就是 Claude Code）。采纳了三条与平台无关的真 bug：
+
+### Fixed
+- **README 断链**：`templates/sample-preview.pdf` → `template/sample-preview.pdf`（少个目录名错，markdown 链接检查的唯一断链）。顺带修目录树里的 `templates/` 旧名、补 `_layout-demo.html`/`_eval/` 条目、版式数 10→17。
+- **check_geometry.py 头部文档与代码矛盾**：文档头还写"字号<14pt"，实际阈值 `MIN_PT=8.0`（上一版降阈值时漏改头部）。同步成 8pt 逻辑，避免维护误判。
+
+### Changed
+- **几何护栏焊进 build_pdf 导出闸门（只警告不阻断）**：导出时顺带跑 check_geometry，字号<8pt/出血打印 `[geom warn]` 但不拒绝导出。理由：溢出是零误报硬红线→拒绝导出；几何护栏对某些合法装饰定位可能误报→只提示、判断权留人。把护栏从"记得单独跑"挂进主流程，又不会因误报卡住真实交付。验证：魔鬼样本导出时正确警告 2 处（6pt+右出血）且仍成功导出。
+
+### 未采纳（平台错位，记录备查）
+- "version 不是合法 frontmatter 字段"=Codex 规范，Claude Code 无此限制；version 留 frontmatter 与 VERSION/README 三处一致（health_check 已守此一致性）。
+- "统一到 .codex/skills/、改平台中性口径、清理 deck-craft 别名"=按 Codex 个人 skill 管的思路；我们主线是 Claude Code skill，SKILL.md 用 Claude 工具名（AskUserQuestion/Read/Bash）是正确的。deck-craft 是 Codex 侧自装别名，非本仓库产物。
+
 ## [4.11.0] — 2026-06-17 · 机器评测套件：把"人工渲染验收"变成"脚本判对错"
 
 竞品调研（2026-06-17）的落地。调研结论：SPIC-PPT 在"工程闸门"和"路线判断"上已领先同类（reveal.js 承认垂直溢出无法自动解决、frontend-slides 等同类无任何质检），落后的不是方向是"密度"——确定性脚本管可量化项这条路只做了"溢出"一个点。本版把它从一个点铺成一张网。
