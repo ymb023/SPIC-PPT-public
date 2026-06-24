@@ -125,7 +125,14 @@ window.addEventListener("load", function() {
         if (top < -BLEED_TOL) dir.push("上" + Math.round(top));
         if (dir.length) bleed.push({ el: label(el), dir: dir.join("/") });
       }
-      report.push({ page: i + 1, fontTooSmall: fontBad, bleed: bleed });
+      // 采集本页页码（.page-no / .page-num / .page-footer 里的数字）
+      var pno = null;
+      var pnEl = s.querySelector(".page-no, .page-num, .page-footer");
+      if (pnEl) {
+        var mm = (pnEl.textContent || "").match(/[0-9]+/);
+        if (mm) pno = parseInt(mm[0], 10);
+      }
+      report.push({ page: i + 1, fontTooSmall: fontBad, bleed: bleed, pageNo: pno });
     }
     var d = document.createElement("div");
     d.id = "__geometry_report__";
@@ -167,18 +174,39 @@ def _render_report(html_path: Path) -> list:
     return json.loads(m.group(1))
 
 
+def page_number_issues(report: list) -> list:
+    """检查页码连续性。只看"有页码"的页（封面/扉页常无，不强求），
+    验证它们的数字序列严格 +1，抓重号/跳号/串号（插页后高发）。
+    返回问题描述列表，空 = 连续无误。"""
+    seq = [(p["page"], p.get("pageNo")) for p in report
+           if p.get("pageNo") is not None]
+    issues = []
+    for i in range(1, len(seq)):
+        prev_slide, prev_no = seq[i - 1]
+        cur_slide, cur_no = seq[i]
+        if cur_no == prev_no:
+            issues.append(f"重号：第{prev_slide}、{cur_slide} 张都是页码 {cur_no}")
+        elif cur_no != prev_no + 1:
+            issues.append(
+                f"跳号/串号：第{cur_slide} 张页码 {cur_no}，"
+                f"应接前一页 {prev_no} 后为 {prev_no + 1}")
+    return issues
+
+
 def check_geometry(html_path: Path, json_output: bool = False,
                    return_data: bool = False):
-    """检测字号过小 + 元素出血。
+    """检测字号过小 + 元素出血 + 页码连续性。
 
-    return_data=True 时返回 {"pages":[...]} 供测试/eval 调用；
+    return_data=True 时返回 {"pages":[...], "pageNoIssues":[...]} 供测试/eval 调用；
     否则打印报告并返回 exit code（0/1）。
     """
     report = _render_report(html_path)
-    data = {"html": str(html_path), "pages": report}
+    pno_issues = page_number_issues(report)
+    data = {"html": str(html_path), "pages": report, "pageNoIssues": pno_issues}
 
     flagged = [p for p in report
                if p["fontTooSmall"] or p["bleed"]]
+    has_fail = bool(flagged or pno_issues)
 
     if return_data:
         return data
@@ -186,12 +214,12 @@ def check_geometry(html_path: Path, json_output: bool = False,
     if json_output:
         print(json.dumps({**data, "flagged_count": len(flagged)},
                          ensure_ascii=False, indent=2))
-        return 1 if flagged else 0
+        return 1 if has_fail else 0
 
     print(f"\n{BOLD}SPIC-PPT geometry check{RESET}")
     print("=" * 32)
     print(f"html: {html_path}")
-    print(f"pages: {len(report)}   规则: 字号≥{MIN_PT}pt + 无左/右/上出血\n")
+    print(f"pages: {len(report)}   规则: 字号≥{MIN_PT}pt + 无左/右/上出血 + 页码连续\n")
     for p in report:
         issues = []
         for f in p["fontTooSmall"]:
@@ -203,13 +231,23 @@ def check_geometry(html_path: Path, json_output: bool = False,
                   f"\n           ".join(issues))
         else:
             print(f"  {GREEN}[ ok ]{RESET} p{p['page']:>2}")
+    if pno_issues:
+        print(f"\n  {RED}[页码]{RESET}")
+        for it in pno_issues:
+            print(f"    · {it}")
     print()
-    if flagged:
-        print(f"{RED}{BOLD}Result: {len(flagged)}/{len(report)} 页有几何违规{RESET}")
-        print(f"{DIM}字号修复：放大到 ≥14pt 或加 .compact（不要靠缩字号塞内容）"
-              f"\n出血修复：检查负 margin / 绝对定位 / 宽度溢出{RESET}")
+    if has_fail:
+        msg = []
+        if flagged:
+            msg.append(f"{len(flagged)}/{len(report)} 页有几何违规")
+        if pno_issues:
+            msg.append(f"{len(pno_issues)} 处页码问题")
+        print(f"{RED}{BOLD}Result: {' + '.join(msg)}{RESET}")
+        print(f"{DIM}字号修复：放大或加 .compact（不靠缩字号塞内容）"
+              f"\n出血修复：检查负 margin / 绝对定位 / 宽度溢出"
+              f"\n页码修复：插页后用脚本降序批量 +1，避免重号/串号{RESET}")
         return 1
-    print(f"{GREEN}{BOLD}Result: 全部 {len(report)} 页几何合规{RESET}")
+    print(f"{GREEN}{BOLD}Result: 全部 {len(report)} 页几何合规、页码连续{RESET}")
     return 0
 
 

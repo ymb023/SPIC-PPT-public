@@ -59,8 +59,10 @@ def _overflow_clean(html: Path) -> bool:
 
 
 def _geometry_clean(html: Path) -> bool:
-    """check_geometry 全过返回 True。"""
+    """check_geometry 全过返回 True（含字号/出血/页码连续）。"""
     data = check_geometry(html, return_data=True)
+    if data.get("pageNoIssues"):
+        return False
     for p in data["pages"]:
         if p["fontTooSmall"] or p["bleed"]:
             return False
