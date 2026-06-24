@@ -4,6 +4,21 @@
 
 ---
 
+## [4.11.3] — 2026-06-22 · 架构清理（/simplify 四维审查后）
+
+4 个并行 agent 按 reuse/simplification/efficiency/altitude 审了 skill 架构。采纳低风险高确定项，验证后剔除多个 agent 误报，最大的重构项明确推迟。
+
+### Removed / Cleaned
+- 删 `template/visual-upgrade-demo.html`（1072 行，0 引用，v4.2 废弃的设计预览迭代）。
+- 删 components.css 里孤儿 `.title-row .meta` 规则——其唯一用法已在 v4.11.2 禁止（会盖右上 LOGO），留着 CSS 等于为禁用模式保留样式、误导维护。换成一行说明注释。
+
+### Changed
+- **版本一致性检查扩到 4 处**：health_check 的 `check_version_consistency` 加 components.css 顶注（原只查 VERSION/SKILL.md/README 三处）。上线即抓出真漂移——css 顶注停在 v4.11.0、落后 skill 两个版本。这正是该检查的价值：人工维护的注释版本号必漏，焊进自检才可靠。
+
+### 审查结论（剔除的误报 + 推迟项，记录判断）
+- **剔除（验证为误报/会破坏）**：删 design-spec-summary.md（被 2 个 README 引用，删=文档漂移）；删 .eyebrow/.eyebrow-cn（visual-evolution 明确"保留备特殊场景"）；抽 ANSI 颜色到共享模块（28 行永不变的常量，新增依赖不值）。
+- **推迟（价值最高但太重，留待专门 TDD）**：统一 check_overflow/check_geometry 的 Chrome 渲染骨架 + build_pdf 合并两次 Chrome 启动为一次（reuse/efficiency/altitude 三个 agent 都指向它，省每次导出 2-4 秒）。它动的是所有检查依赖的核心，不能在无人值守的清理 pass 里盲改——需独立 RED/GREEN。已记为下一个候选。
+
 ## [4.11.2] — 2026-06-22 · 复用旧页三连：默认保留 + 页码检查 + 内页 meta 修复
 
 一份真实拼装+重绘成品（算电协同，旧页粘进来风格不一致、重绘后图文混排乱）暴露的三个问题，依次解决。第 1 个是机制升级（探讨认可后实现），2/3 是确定性修复。

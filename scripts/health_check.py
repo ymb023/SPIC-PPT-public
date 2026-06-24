@@ -322,10 +322,11 @@ def check_templates_double_track(skill_dir: Path, rpt: Report) -> None:
 
 
 def check_version_consistency(skill_dir: Path, rpt: Report) -> None:
-    """版本号三处必须一致：VERSION / SKILL.md frontmatter / README 当前版本行。
+    """版本号四处必须一致：VERSION / SKILL.md frontmatter / README 当前版本行 /
+    components.css 顶注。
 
-    历史教训：升版本时反复漏改 README 的"当前版本"行（靠记得=必漏）。
-    把一致性变成可检测的失败，焊进 health check。
+    历史教训：升版本时反复漏改某处（靠记得=必漏）——README 漏过、components.css
+    顶注一度滞后到 v4.6.1。把一致性变成可检测的失败，焊进 health check。
     """
     versions: dict[str, str] = {}
 
@@ -356,6 +357,16 @@ def check_version_consistency(skill_dir: Path, rpt: Report) -> None:
         if rm:
             versions["README.md"] = rm.group(1)
 
+    # 4) components.css 顶注（SPIC-PPT 标准模板 vX.Y.Z · 通用组件）
+    css = skill_dir / "template" / "components.css"
+    if css.exists():
+        cm = re.search(
+            r"标准模板\s*v([0-9]+\.[0-9]+\.[0-9]+)",
+            css.read_text(encoding="utf-8")[:400],
+        )
+        if cm:
+            versions["components.css"] = cm.group(1)
+
     if len(versions) < 2:
         rpt.warn(
             "version consistency: 不足两处可比对",
@@ -375,7 +386,7 @@ def check_version_consistency(skill_dir: Path, rpt: Report) -> None:
         detail = "\n".join(f"  {k}: {v}" for k, v in versions.items())
         rpt.fail(
             "version MISMATCH across sources (升版本时漏改了某处)",
-            detail + "\nfix: 三处统一到同一版本号",
+            detail + "\nfix: 四处统一到同一版本号",
         )
 
 
