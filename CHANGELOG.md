@@ -4,6 +4,26 @@
 
 ---
 
+## [4.11.4] — 2026-06-22 · 全面审计：正确性 bug 修复 + 文档去漂移
+
+两个 agent 并行做正确性审计 + 文档一致性审计，发现的每条都自己 grep/实跑核验后才采纳（剔除若干误报）。
+
+### Fixed（正确性 bug，均已实测验证）
+- **页码检查取错数字（live wrong-result）**：`check_geometry` 选择器 `.page-no,.page-num,.page-footer` 按 document 顺序先匹配到 `.page-footer` 父元素，读它的整段 textContent——页脚左侧若有年份/期号（"2026 第3期"）就被当成页码，误报重号。改为优先专用 `.page-num/.page-no`、取末尾数字串。夹具验证：带"2026 第3期"页脚的 01/02/03 不再误报；真重号 02/02 仍被抓。
+- **eval_suite false-green（Chrome 渲染失败被当"护栏抓到"）**：`_overflow_clean` 把 exit 2（渲染失败）和 exit 1（真违规）都算"非 clean"，魔鬼样本因此即使 Chrome 没跑成也 PASS。重构为三态 clean/dirty/**error**，渲染失败一律判 FAIL，绝不 false-green。
+- **eval_suite 崩溃（错误处理不对称）**：`_geometry_clean` 未捕获 `check_geometry` 的 RuntimeError，Chrome 失败时整个 suite traceback 退出（而 overflow 侧被静默吞掉）。两侧对称化，渲染失败统一报 error。
+- **build_pdf 几何警告漏页码**：导出时几何护栏只列字号/出血，`pageNoIssues` 算了却没显示。补上。
+- **inline_html 缺 resolve()**：相对路径+中文目录下 base_dir 锚错致 CSS/图片解析失败（同 check_overflow 早修过的坑）。入口加 `resolve()`。
+
+### Fixed（文档漂移，误导未来 AI/用户）
+- **scripts/README.md 漏 4 个脚本**：脚本索引表只列 3 个，缺导出主入口 build_pdf.py 及 check_geometry/eval_suite/inline_html。补全 7 脚本表 + 各自用法节；修陈旧中文资产名（集团波浪条→wave-inner/wave-cover-plain）、废弃的手敲 chrome 集成示例（→build_pdf.py）、health_check 检查项（补版本四处一致）。
+- **template/README.md 停在 v2**：10 版式/THANK YOU 尾页/`_shared/` 旧路径全过时。顶部加归档警示——版式数/尾页/路径/流程一律以 SKILL.md 为准。
+- **SKILL.md "10 种版式"残留**：流程正文两处与自身"17 种版式"标题矛盾，改为 17 种 / 基础10+第二代7。
+
+### 剔除（审计误报或不值，记录判断）
+- 报告-extraction 正则 `\[.*?\]</div>`、inline_html 的 `.replace` 单标签作用域、os.getpid 临时文件命名、px→pt 换算——逐条核验为正确，无 bug。
+- bleed 不跳过 absolute：警告-only 且模板内 absolute 装饰都在界内，低值，不改。
+
 ## [4.11.3] — 2026-06-22 · 架构清理（/simplify 四维审查后）
 
 4 个并行 agent 按 reuse/simplification/efficiency/altitude 审了 skill 架构。采纳低风险高确定项，验证后剔除多个 agent 误报，最大的重构项明确推迟。

@@ -4,9 +4,13 @@
 
 | 脚本 | 用途 | 何时跑 |
 |---|---|---|
-| `health_check.py` | 一键体检 skill 工程健康度（frontmatter、LOGO 路径、关键文件、目录双轨、CSS 关键类） | fresh install 后、任何手动改动后、CI |
+| `build_pdf.py` | **导出主入口**：溢出闸门→快照留底→导 PDF→顺带产单文件 standalone | **第七阶段导出用这个**，别手敲 chrome |
+| `check_overflow.py` | 检测 .slide 内容是否超出 720px 边界（被 build_pdf 当闸门调用） | 单独自检；build_pdf 自动调 |
+| `check_geometry.py` | 几何护栏：字号<8pt / 元素出血 / 页码连续性 | 单独自检；build_pdf 导出时只警告不阻断 |
+| `eval_suite.py` | 回归评测：3 固定输入跑全套，确认 17 版式不退化、护栏灵敏 | **改 theme/components.css 后必跑** |
+| `inline_html.py` | 把 HTML 的外部 CSS+图片内联成自包含单文件（被 build_pdf 调用） | build_pdf 自动调；一般不单独跑 |
 | `extract_images.py` | 从 .docx / .pptx / .pdf 抽出可复用图片 | 接到用户成稿后的第二阶段 |
-| `check_overflow.py` | **检测装配好的 PPT HTML 中哪些 .slide 内容超出 720px 边界** | **第七阶段必跑**：导出 PDF 之前先体检 |
+| `health_check.py` | 体检 skill 工程健康度（frontmatter、LOGO 路径、关键文件、CSS 关键类、版本四处一致） | fresh install 后、任何手动改动后、CI |
 
 ---
 
@@ -28,9 +32,10 @@ python scripts/health_check.py --skill-dir C:/path/to/SPIC-PPT
 
 1. **frontmatter YAML 合法性**：SKILL.md 头部 `--- ... ---` 必须能被 `yaml.safe_load` 解析；必有 `name`、`description`；`name` 必须是 kebab-case 小写；`description` ≥ 50 字符。
 2. **LOGO / 资源路径解析**：递归扫描所有 `.html`（跳过 `_preview/` 等），把 `<img src="...">` 当作相对该 HTML 的路径解析，校验目标文件是否存在。
-3. **关键文件存在性**：`template/{theme.css, components.css, sample-pages.html, template.html}`、`_assets/集团波浪条-{内页, 封面_纯背景}.png`、`shared/logos/etrc/etrc-logo.png`。
+3. **关键文件存在性**：`template/{theme.css, components.css, sample-pages.html, template.html, _layout-demo.html}`、`_assets/{wave-inner, wave-cover-plain}.png`、`shared/logos/etrc/etrc-logo.png`、`scripts/{check_geometry, eval_suite}.py`、`template/_eval/stress-test.html`。
 4. **目录双轨检测**：如果 `templates/` 仍存在，告 WARNING（建议统一到 `template/`）。
-5. **components.css 关键修饰类**：必须含 `.slide.compact`、`.slide.center-y`、`.body-center`（v4.3 升级后的核心类）。
+5. **components.css 关键修饰类**：必须含 `.slide.compact`、`.slide.center-y`、`.body-center`。
+6. **版本号四处一致**：VERSION / SKILL.md frontmatter / README 当前版本行 / components.css 顶注，不一致即 FAIL。
 
 ### 退出码
 
@@ -179,9 +184,20 @@ Result: 2 / 26 pages overflow
 
 ### 集成到工作流
 
-第七阶段（PDF 导出前）必跑：
+第七阶段直接用 `build_pdf.py`（已把溢出闸门焊进导出，不要再手敲 chrome 命令）：
 ```bash
-python scripts/check_overflow.py 成品PPT.html && chrome --headless=new --print-to-pdf=...
+python scripts/build_pdf.py 成品PPT.html
 ```
+它先跑 check_overflow，任一页溢出即拒绝导出；过了才导 PDF + 顺带产单文件 standalone。
+单独自检（不导出）仍可用 `python scripts/check_overflow.py 成品PPT.html`。
 
-通过则继续导 PDF；FAIL 则先按建议改 HTML，再循环检测。
+---
+
+## build_pdf.py / check_geometry.py / eval_suite.py / inline_html.py
+
+这四个脚本的用法与设计见 **SKILL.md 第七/八阶段**与 **CHANGELOG**（v4.6 导出闸门、v4.8 快照、v4.9 单文件、v4.11 评测套件+几何护栏）。要点：
+
+- **build_pdf.py**：导出主入口。`--no-standalone` 跳过单文件、`--force` 跳过溢出闸门、`--tolerance N` 调容差、`-o` 指定输出。导出时顺带跑几何护栏（字号<8pt/出血/页码），只警告不阻断。
+- **check_geometry.py**：`python scripts/check_geometry.py deck.html [--json]`。字号红线 8pt（"真看不清"绝对线，非 14pt）、元素出血、页码连续性。
+- **eval_suite.py**：`python scripts/eval_suite.py`。改 theme/components.css 后跑，3 固定输入（两样板期望全过 + 魔鬼样本期望被抓）自动判版式是否退化、护栏是否失灵。
+- **inline_html.py**：被 build_pdf 调用产 standalone，一般不单独跑。

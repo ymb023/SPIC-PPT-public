@@ -161,6 +161,8 @@ def main() -> None:
                 gissues.append(f"p{p['page']} 字号 {f['pt']}pt<8 ({f['el']})")
             for b in p["bleed"]:
                 gissues.append(f"p{p['page']} 出血 {b['dir']} ({b['el']})")
+        for it in gdata.get("pageNoIssues", []):
+            gissues.append(f"页码 {it}")
         if gissues:
             print(f"{YELLOW}[geom warn]{RESET} 几何护栏发现 "
                   f"{len(gissues)} 处（不阻断导出，请自行判断）：")

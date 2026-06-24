@@ -1,6 +1,6 @@
 ---
 name: spic-ppt
-version: 4.11.3
+version: 4.11.4
 description: >-
   Use when the user has an existing research report, outline, or written
   manuscript and wants to convert it into a polished HTML+PDF presentation deck
@@ -102,7 +102,7 @@ python scripts/extract_images.py <成稿路径> _images/extracted
 
 写一份 `结构抽取_V1.md`，对每页给出：
 - 页面标题（用户原文或抽取）
-- 版式建议（从标准模板的 10 种版式中选）
+- 版式建议（从标准模板的 17 种版式中选，见下方版式表）
 - 核心论点（保留用户原文，不要替换措辞）
 - 关键数据/引用
 - **图片资源决策**：对每页需要图的位置做三选一决策：
@@ -156,7 +156,7 @@ python scripts/extract_images.py <成稿路径> _images/extracted
 装配步骤：
 1. 复制 `template/template.html` 到项目目录作为骨架
 2. 按结构抽取的页面顺序复制 `<section>` 块
-3. 每页套用对应的主体版式（10 种版式见 sample-pages.html）
+3. 每页套用对应的主体版式（基础 10 种见 sample-pages.html，第二代 7 种见 _layout-demo.html）
 4. 关键论点用 `class="key-point"`（v4 hairline+左红条+小标签+图标）
 5. 关键数据用 `<span class="accent">XX</span>` 染红
 6. 含数据的页加 `<div class="data-source">数据来源：...</div>`

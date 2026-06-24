@@ -50,23 +50,38 @@ INPUTS = [
 ]
 
 
-def _overflow_clean(html: Path) -> bool:
-    """check_overflow 全过返回 True。吞掉它的打印，只取返回码。"""
+# 三态：渲染失败(error)必须与"护栏抓到违规"(dirty)区分——否则魔鬼样本会因
+# Chrome 没渲染成功而 false-green（exit 2 被当成"护栏抓到了"）。
+CLEAN, DIRTY, ERROR = "clean", "dirty", "error"
+
+
+def _overflow_state(html: Path) -> str:
+    """check_overflow：0=clean / 1=dirty(有溢出) / 2=error(渲染失败)。"""
     with contextlib.redirect_stdout(io.StringIO()), \
             contextlib.redirect_stderr(io.StringIO()):
-        code = check_html(html, tolerance=2, json_output=True)
-    return code == 0
+        try:
+            code = check_html(html, tolerance=2, json_output=True)
+        except Exception:
+            return ERROR
+    if code == 2:
+        return ERROR
+    return CLEAN if code == 0 else DIRTY
 
 
-def _geometry_clean(html: Path) -> bool:
-    """check_geometry 全过返回 True（含字号/出血/页码连续）。"""
-    data = check_geometry(html, return_data=True)
+def _geometry_state(html: Path) -> str:
+    """check_geometry：渲染失败抛 RuntimeError → error；否则按违规判 clean/dirty。"""
+    try:
+        with contextlib.redirect_stdout(io.StringIO()), \
+                contextlib.redirect_stderr(io.StringIO()):
+            data = check_geometry(html, return_data=True)
+    except Exception:
+        return ERROR
     if data.get("pageNoIssues"):
-        return False
+        return DIRTY
     for p in data["pages"]:
         if p["fontTooSmall"] or p["bleed"]:
-            return False
-    return True
+            return DIRTY
+    return CLEAN
 
 
 def main() -> int:
@@ -82,24 +97,29 @@ def main() -> int:
             all_ok = False
             continue
 
-        ov = _overflow_clean(html)
-        ge = _geometry_clean(html)
-        actually_clean = ov and ge
+        ov = _overflow_state(html)
+        ge = _geometry_state(html)
 
-        if item["expect_clean"]:
-            ok = actually_clean
+        if ov == ERROR or ge == ERROR:
+            # 渲染失败：既不是"全过"也不是"护栏抓到"，是硬错误，绝不算 PASS
+            ok = False
+            verdict = f"{RED}渲染失败（Chrome 没跑成）—— 无法判定{RESET}"
+        elif item["expect_clean"]:
+            ok = (ov == CLEAN and ge == CLEAN)
             verdict = "应全过" + ("✓" if ok else "✗ 退化了！")
         else:
-            # 魔鬼样本：期望"不干净"（护栏抓到了东西）
-            ok = not actually_clean
+            # 魔鬼样本：期望至少一项 dirty（护栏真抓到违规，而非渲染失败）
+            ok = (ov == DIRTY or ge == DIRTY)
             verdict = "应报违规" + ("✓ 护栏抓到" if ok else "✗ 护栏失灵！")
 
         all_ok = all_ok and ok
         mark = f"{GREEN}[ ok ]{RESET}" if ok else f"{RED}[FAIL]{RESET}"
-        oflag = "溢出✓" if ov else f"{RED}溢出✗{RESET}"
-        gflag = "几何✓" if ge else f"{RED}几何✗{RESET}"
+        def flag(name, st):
+            if st == CLEAN: return f"{name}✓"
+            if st == DIRTY: return f"{name}！"
+            return f"{RED}{name}ERR{RESET}"
         print(f"  {mark} {html.name:<24} {DIM}{item['desc']}{RESET}")
-        print(f"         {oflag}  {gflag}  → {verdict}")
+        print(f"         {flag('溢出',ov)}  {flag('几何',ge)}  → {verdict}")
 
     print()
     if all_ok:

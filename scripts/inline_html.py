@@ -72,7 +72,9 @@ def inline_html(src_html: Path, out_path: Path | None = None) -> Path:
     out_path 默认 <src_stem>.standalone.html（同目录）。返回产出路径。
     找不到的依赖：警告并跳过，不中断。已是 data:/http 的引用：跳过（幂等）。
     """
-    src_html = Path(src_html)
+    # resolve()：相对路径 + 中文目录下，base_dir 锚到相对父目录会导致 CSS/图片
+    # 解析失败（同 check_overflow 的中文路径坑）。转绝对路径自行消化。
+    src_html = Path(src_html).resolve()
     base_dir = src_html.parent
     html = src_html.read_text(encoding="utf-8")
     warnings: list[str] = []

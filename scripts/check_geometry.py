@@ -125,13 +125,18 @@ window.addEventListener("load", function() {
         if (top < -BLEED_TOL) dir.push("上" + Math.round(top));
         if (dir.length) bleed.push({ el: label(el), dir: dir.join("/") });
       }
-      // 采集本页页码（.page-no / .page-num / .page-footer 里的数字）
+      // 采集本页页码。优先专用的 .page-num/.page-no（document 顺序里 .page-footer
+      // 父元素会先匹配，它的 textContent 含左侧 data-source/日期等数字，取错）。
+      // 实在没有专用元素才退回 .page-footer，并取末尾数字串（页码总在右侧）。
       var pno = null;
-      var pnEl = s.querySelector(".page-no, .page-num, .page-footer");
-      if (pnEl) {
-        var mm = (pnEl.textContent || "").match(/[0-9]+/);
-        if (mm) pno = parseInt(mm[0], 10);
+      var pnEl = s.querySelector(".page-num, .page-no");
+      var src = pnEl ? pnEl.textContent : "";
+      if (!pnEl) {
+        var foot = s.querySelector(".page-footer");
+        src = foot ? foot.textContent : "";
       }
+      var mm = (src || "").match(/[0-9]+/g);
+      if (mm && mm.length) pno = parseInt(mm[mm.length - 1], 10);
       report.push({ page: i + 1, fontTooSmall: fontBad, bleed: bleed, pageNo: pno });
     }
     var d = document.createElement("div");
