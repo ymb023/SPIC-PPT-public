@@ -1,5 +1,5 @@
 /* ============================================
-   SPIC-PPT 标准模板 v4.11.4 · 通用组件
+   SPIC-PPT 标准模板 v4.12.0 · 通用组件
    纯白底 + hairline 边框 + 微阴影 + 大字号锚点
    含修饰类：.slide.compact (密集页) / .slide.center-y (稀疏页) / .body-center
    详见 references/visual-evolution.md
@@ -507,6 +507,9 @@
 .body-grid.cols-1-2 { grid-template-columns: 1fr 1.2fr; }
 .body-grid.cols-2-1 { grid-template-columns: 1.2fr 1fr; }
 .body-grid > * { min-width: 0; min-height: 0; }
+/* v-center：一栏带背景卡撑满、另一栏内容不满时，默认 stretch 会暴露视觉不齐
+   （如公式卡 vs 不满表格）。改两栏内容垂直居中浮动，高度差变上下对称留白。 */
+.body-grid.v-center { align-items: center; }
 
 /* ====== 图表容器（v4.6 · 图片 containment 焊进 CSS） ======
    过去 .chart-frame img 是 height:auto → 竖高图按原始比例撑高 → 既撑破 720
@@ -1067,3 +1070,49 @@
 .shot-frame .bar i:nth-child(3) { background: #27c93f; }
 .shot-frame img { width: 100%; height: 100%; flex: 1; object-fit: cover; object-position: center top; display: block; min-height: 0; }
 .shot-cap { text-align: center; font-size: 12.5pt; color: var(--ink-med); margin-top: 9pt; font-weight: var(--fw-medium); }
+
+/* ====== 多图横排（v4.12 · 等高图槽，解决不同比例图横排参差）======
+   N 张比例不同的数据图横排，要同时"够大 + 等高 + 不溢出"。
+   机制：每个图槽 flex:1 等高 → 底对齐；图 object-fit:contain → 不裁不变形、框内居中；
+   整体 flex:1 + min-height:0 → 吃满剩余空间，配 .compact 防溢出。
+   与单图 .chart-frame（v4.6）不冲突：此处是多图等高横排专用。 */
+.charts-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;   /* 默认 3 列 */
+  gap: 14pt;
+  flex: 1;
+  min-height: 0;
+  align-items: stretch;
+  margin-top: 8pt;
+}
+.charts-row.cols-2 { grid-template-columns: 1fr 1fr; }
+.charts-row.cols-4 { grid-template-columns: 1fr 1fr 1fr 1fr; }
+.charts-row > .chart-col {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  min-width: 0;
+}
+.charts-row .chart-frame {
+  flex: 1;                 /* 等高图槽——底对齐的关键 */
+  min-height: 0;
+  padding: 6pt;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.charts-row .chart-frame img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;     /* 不裁切、不变形、框内居中 */
+  display: block;
+}
+.charts-row .chart-cap {
+  flex: 0 0 auto;
+  text-align: center;
+  font-size: 12pt;
+  color: var(--ink-med);
+  margin-top: 6pt;
+  font-weight: var(--fw-medium);
+}
+.slide.compact .charts-row .chart-cap { font-size: 11pt; margin-top: 4pt; }

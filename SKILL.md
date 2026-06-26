@@ -1,6 +1,6 @@
 ---
 name: spic-ppt
-version: 4.11.4
+version: 4.12.0
 description: >-
   Use when the user has an existing research report, outline, or written
   manuscript and wants to convert it into a polished HTML+PDF presentation deck
@@ -102,7 +102,7 @@ python scripts/extract_images.py <成稿路径> _images/extracted
 
 写一份 `结构抽取_V1.md`，对每页给出：
 - 页面标题（用户原文或抽取）
-- 版式建议（从标准模板的 17 种版式中选，见下方版式表）
+- 版式建议（从标准模板的 18 种版式中选，见下方版式表）
 - 核心论点（保留用户原文，不要替换措辞）
 - 关键数据/引用
 - **图片资源决策**：对每页需要图的位置做三选一决策：
@@ -191,7 +191,8 @@ python scripts/extract_images.py <成稿路径> _images/extracted
 | **字号体系** | 投屏可读：正文 14pt / 标签 12pt / 来源 11pt 起步，禁止再缩 | v4.3 节 |
 | **密集页救援** | 内容装不下 720px → 加 `class="slide compact"` | v4.3.1 节 |
 | **稀疏页救援** | 目录/单引用等内容少于半页 → 加 `class="slide center-y"` | v4.3.3 节 |
-| **双栏对齐** | 直接用 `<div class="body-grid">`（对齐已焊进 CSS：等高、底对齐，**不要再手写 grid**）；偏比例用 `.body-grid.cols-1-2` / `.cols-2-1` | v4.6 节 |
+| **双栏对齐** | 直接用 `<div class="body-grid">`（对齐已焊进 CSS：等高、底对齐，**不要再手写 grid**）；偏比例用 `.cols-1-2`/`.cols-2-1`；**一栏带背景卡、另一栏内容不满**时加 `.v-center`（两栏内容居中，避免背景卡撑满显不齐） | v4.6/v4.12 节 |
+| **多图横排** | N 张比例不同的数据图横排用 `<div class="charts-row">`（等高图槽 + contain，底对齐不溢出），**不要手写 grid 凑高度**；配 `.compact` 防溢出 | v4.12 节 |
 | **图表容器** | 图直接放 `<div class="chart-frame"><img></div>`（已焊 `max-height:100%`+`object-fit:contain`，竖高图不撑破、不变形） | v4.6 节 |
 | **保留 vs 替换** | 字体/配色/装饰元素不能改；标题/正文/数据必须替换 demo | "v4 装配铁律" 节 |
 | **不要现代化** | v4 视觉系统已稳定，不要主动"优化"模板（仅用户明确说才改） | "Don't modernize" 节 |
@@ -295,7 +296,7 @@ for idx in [0, len(doc)//4, len(doc)//2, 3*len(doc)//4, len(doc)-1]:
 
 ---
 
-## 标准模板的 17 种版式
+## 标准模板的 18 种版式
 
 详见 `template/sample-pages.html`（01-10 基础版式）+ `template/_layout-demo.html`（11-17 第二代破三明治版式）：
 
@@ -325,6 +326,7 @@ for idx in [0, len(doc)//4, len(doc)//2, 3*len(doc)//4, len(doc)-1]:
 | 15 | 组织架构（一行部门卡，.me 高亮自身） | `.dept-row`/`.dept` | 机构介绍从大到小、定位到我 |
 | 16 | 外部机构 logo 墙 | `.logo-wall`/`.lw-grid` | 权威客户背书（比文字名单有力） |
 | 17 | 产品截图框（浏览器chrome，cover铺满） | `.shot-frame` | 真实产品界面（区别于图表 chart-frame 的 contain） |
+| 18 | 多图横排（等高图槽，底对齐不溢出） | `.charts-row`+`.chart-col` | N 张比例不同的数据图横排（cols-2/3/4）；图 contain 不裁不变形 |
 
 **标题区三件套**（`.head-block`：眉标+大标题+导语带 `.hl` 红高亮）是 11-17 的共享标题骨架，连续叙事场景比标准 title-row 更克制。
 
